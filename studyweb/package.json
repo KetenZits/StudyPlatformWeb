@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.49.1",
     "@clerk/nextjs": "^6.33.1",
+    "@convex-dev/auth": "^0.0.90",
     "convex": "^1.27.3",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",

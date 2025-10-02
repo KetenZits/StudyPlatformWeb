@@ -28,7 +28,7 @@ export const createUser = mutation(
         clerkId: identity.subject,
         email: identity.email!,       // จาก JWT claim
         name: name || identity.name!, // จาก JWT claim
-        profilePic: identity.profilePic ?? undefined,
+        profilePic: identity.profilePic ? String(identity.profilePic) : undefined,
         coins: 0,
         passwordHash: "",      // 👈 เพิ่ม
         answerStreak: 0,       // 👈 เพิ่ม
