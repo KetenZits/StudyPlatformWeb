@@ -3,6 +3,7 @@ import { MessageCircle, ChevronRight, ArrowRight, Sparkles, TrendingUp, Award, C
 import { motion } from "framer-motion";
 import React from "react";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 export default function Index() {
 
@@ -87,8 +88,8 @@ export default function Index() {
                 </span>
               </div>
               
-              <h1 className="text-6xl font-black text-gray-900 mb-3 tracking-tight">
-                Welcome To <span className="bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] bg-clip-text text-transparent">Study Platform</span>
+              <h1 className="text-4xl sm:text-6xl font-black text-gray-900 mb-3 tracking-tight">
+                Welcome To <span className="bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] bg-clip-text text-transparent">NeuroSync</span>
               </h1>
               
               <p className="text-gray-600 text-lg font-medium">
@@ -308,6 +309,7 @@ export default function Index() {
 
       </div>
     </div>
+    <Footer/>
     </>
   );
 }

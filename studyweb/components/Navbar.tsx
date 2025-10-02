@@ -1,35 +1,34 @@
 "use client";
-import { Home, BookOpen, LogIn, Store, User, Menu, X } from "lucide-react";
+import { Home, BookOpen, Store, User, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 
 export default function Navbar() {
-
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isSignedIn } = useUser();
 
   const navItems = [
     { id: "home", label: "Home", icon: Home, link: "/" },
     { id: "posts", label: "Posts", icon: BookOpen, link: "/posts" },
-    { id: "login", label: "Login", icon: LogIn, link: "/login" },
     { id: "store", label: "Store", icon: Store, link: "/store" },
     { id: "profile", label: "Profile", icon: User, link: "/profile" },
   ];
 
-    useEffect(() => {
+  useEffect(() => {
     if (pathname === "/") setActiveTab("home");
     else if (pathname.startsWith("/posts")) setActiveTab("posts");
     else if (pathname.startsWith("/store")) setActiveTab("store");
-    else if (pathname.startsWith("/login")) setActiveTab("login");
     else if (pathname.startsWith("/profile")) setActiveTab("profile");
   }, [pathname]);
 
   return (
     <>
-      {/* Desktop Navbar - Top */}
+      {/* Desktop Navbar */}
       <nav className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg py-1">
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex items-center justify-between h-20">
@@ -41,15 +40,15 @@ export default function Navbar() {
               className="flex items-center gap-3"
             >
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
-                <span className="text-white font-black text-xl">S</span>
+                <span className="text-white font-black text-xl">N</span>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-black text-gray-900">Study Platform</span>
+                <span className="text-xl font-black text-gray-900">NeuroSync</span>
                 <span className="text-xs text-gray-500 font-medium">Learn & Share Knowledge</span>
               </div>
             </motion.div>
 
-            {/* Desktop Nav Items */}
+            {/* Nav Items */}
             <div className="flex items-center gap-2">
               {navItems.map((item, i) => {
                 const Icon = item.icon;
@@ -82,15 +81,32 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+
+              {/* Auth Buttons */}
+              {!isSignedIn ? (
+                <>
+                  <Link href="/sign-in" className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
+                    Sign In
+                  </Link>
+                  <Link href="/sign-up" className="px-4 py-2 rounded-xl bg-gradient-to-bl from-amber-700 to-amber-600 text-white">
+                    Sign Up
+                  </Link>
+                </>
+              ) : (
+                <SignOutButton>
+                  <button className="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
+                    Logout
+                  </button>
+                </SignOutButton>
+              )}
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Navbar - Top (with hamburger) */}
+      {/* Mobile Navbar */}
       <nav className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg py-2">
         <div className="flex items-center justify-between h-16 px-5">
-          
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
@@ -99,17 +115,16 @@ export default function Navbar() {
             <span className="text-lg font-black text-gray-900">Study</span>
           </div>
 
-          {/* Hamburger Menu */}
+          {/* Hamburger */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
           >
             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
-
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -142,12 +157,32 @@ export default function Navbar() {
                     </Link>
                   );
                 })}
+
+                {!isSignedIn ? (
+                  <>
+                    <Link href="/sign-in">
+                      <button className="w-full px-4 py-3 rounded-xl my-2 bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
+                        Sign In
+                      </button>
+                    </Link>
+                    <Link href="/sign-up">
+                      <button className="w-full px-4 py-3 rounded-xl my-2 bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
+                        Sign Up
+                      </button>
+                    </Link>
+                  </>
+                ) : (
+                  <SignOutButton>
+                    <button className="w-full px-4 py-3 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
+                      Logout
+                    </button>
+                  </SignOutButton>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
-
     </>
   );
 }
