@@ -30,7 +30,7 @@ export default function Navbar() {
   return (
     <>
       {/* Desktop Navbar - Top */}
-      <nav className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg">
+      <nav className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg py-1">
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex items-center justify-between h-20">
             
@@ -88,12 +88,12 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Navbar - Top (with hamburger) */}
-      <nav className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg">
+      <nav className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-lg py-2">
         <div className="flex items-center justify-between h-16 px-5">
           
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
               <span className="text-white font-black text-lg">S</span>
             </div>
             <span className="text-lg font-black text-gray-900">Study</span>
@@ -124,21 +124,22 @@ export default function Navbar() {
                   const isActive = activeTab === item.id;
                   
                   return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setActiveTab(item.id);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
-                        isActive
-                          ? "bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-sm font-semibold">{item.label}</span>
-                    </button>
+                    <Link key={item.id} href={item.link}>
+                      <button
+                        onClick={() => {
+                          setActiveTab(item.id);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
+                          isActive
+                            ? "bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                        <span className="text-sm font-semibold">{item.label}</span>
+                      </button>
+                    </Link>
                   );
                 })}
               </div>
