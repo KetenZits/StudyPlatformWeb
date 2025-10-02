@@ -1,0 +1,53 @@
+📱 ระบบทั้งหมดของแอพ
+
+🔑 Authentication & Profile
+Register / Login / Forgot password
+Social login (Google)
+Profile page → รูปโปรไฟล์, ชื่อ, bio
+แต่ง profile ด้วย item/badge จาก store
+
+📝 Q&A Core
+Post คำถาม → title, body, เลือก category
+Answer → ตอบคำถามใต้โพสต์
+Best Answer → คนตั้งคำถามเลือกคำตอบที่ดีที่สุด
+Feed แสดงโพสต์ทั้งหมด + filter ด้วย category
+
+💰 Reward & Economy
+ระบบ coin
+ได้ coin เมื่อคำตอบถูกเลือกเป็น Best Answer
+Store → ใช้ coin ซื้อ item เช่น badge, ป้ายชื่อ, ของตกแต่ง
+Item แสดงบน profile / ข้างชื่อ user
+
+🔥 Streak System
+Answer Streak → ตอบวันละครั้ง = streak +1 (reset ถ้าไม่ตอบ)
+Best Answer Streak → ต้องได้ Best Answer อย่างน้อย 1 ครั้งใน 3 วัน (reset ถ้าเกิน 3 วัน)
+Reward → coin, badge พิเศษเมื่อครบ milestone
+
+📂 Category System
+Category หลัก: คณิต, คอม, ฟิสิก, เคมี, ชีวะ, อื่นๆ
+User เลือก category ตอนโพสต์คำถาม
+หน้า Feed มี filter/tab ตาม category
+ฟีเจอร์เสริม (ที่มึงอยากได้):
+Follow Category → เลือกติดตามเฉพาะหมวดที่สนใจ
+Notification → เด้งเมื่อมีโพสต์ใหม่ในหมวดที่ follow
+Ranking per Category → leaderboard คนตอบเก่งสุดในแต่ละหมวด
+
+🔔 Notification System
+มีคนตอบโพสต์เรา → แจ้งเตือน
+คำตอบถูกเลือกเป็น Best Answer → แจ้งเตือน
+มีโพสต์ใหม่ใน category ที่ follow → แจ้งเตือน
+
+🏆 Gamification / Community
+Leaderboard (global + per category)
+Badge system (จาก streak, จาก store, จาก event)
+
+✅โปรไฟล์โชว์ stats:
+จำนวนโพสต์
+จำนวนคำตอบ
+Best Answer ได้กี่ครั้ง
+Streak ปัจจุบัน
+
+⚙️ Admin (optional เผื่อคิดเผื่อ)
+จัดการ category (เพิ่ม/ลบ/แก้)
+จัดการ user (ban, reset coin)
+Moderate post/answer (ลบ spam, report inappropriate content)

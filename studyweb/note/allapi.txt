@@ -1,0 +1,78 @@
+📡 API ทั้งหมดที่ควรมี
+
+🔑 Auth & User
+register(email, password, name)
+login(email, password)
+loginWithGoogle(googleToken)
+forgotPassword(email)
+getUser(userId)
+updateProfile(userId, { name, profilePic, bio })
+
+📝 Post
+createPost(userId, title, body, categoryId)
+getPosts({ categoryId?, limit?, offset? })
+getPostById(postId)
+deletePost(postId, userId) (เฉพาะเจ้าของหรือตัว mod/admin)
+markBestAnswer(postId, answerId, userId)
+
+💬 Answer
+createAnswer(postId, userId, body)
+→ เช็ค Answer Streak ด้วยตรงนี้
+getAnswers(postId)
+deleteAnswer(answerId, userId) (เฉพาะเจ้าของหรือ mod/admin)
+
+💰 Coin & Store
+getBalance(userId)
+getStoreItems()
+buyItem(userId, itemId)
+getUserItems(userId)
+equipItem(userId, userItemId)
+unequipItem(userId, userItemId)
+
+🔥 Streak
+(auto update ใน createAnswer → Answer Streak)
+(auto update ใน markBestAnswer → Best Answer Streak)
+getStreak(userId) → return { answerStreak, bestStreak }
+
+📂 Category
+getCategories()
+(admin only) createCategory(name, slug)
+(admin only) updateCategory(categoryId, newName, newSlug)
+(admin only) deleteCategory(categoryId)
+
+🔔 Notification
+getNotifications(userId)
+(internal) createNotification(userId, type, data)
+→ ตัวอย่าง type: "newAnswer", "bestAnswer", "newPostInCategory"
+markNotificationRead(notificationId)
+
+🏆 Leaderboard
+getLeaderboard({ type })
+type = "coins", "answerStreak", "bestStreak", "category:math"
+return top users ตาม metric
+
+⚖️ Moderation
+reportPost(postId, reporterId, reason)
+reportAnswer(answerId, reporterId, reason)
+reportUser(targetUserId, reporterId, reason)
+getReports({ status }) (admin/mod only)
+reviewReport(reportId, action) (admin/mod only)
+action = "ignore" | "hidePost" | "hideAnswer" | "banUser"
+
+👮 Admin Only
+banUser(userId)
+unbanUser(userId)
+resetUserCoins(userId)
+setUserRole(userId, role)
+
+🗂️ API Summary
+Auth/User → 6
+Post → 5
+Answer → 3
+Coin/Store → 5
+Streak → 1 (auto update อีก 2 function)
+Category → 4
+Notification → 3
+Leaderboard → 1
+Moderation → 5
+Admin → 4

@@ -1,0 +1,58 @@
+STUDYPLATFORM/
+├── .expo/
+├── .vscode/
+├── app/                      # 📱 Frontend (Expo App Router)
+│   ├── _layout.tsx
+│   ├── index.tsx             # Home
+│   ├── auth/                 # หน้า Auth
+│   │   ├── login.tsx
+│   │   ├── register.tsx
+│   │   └── forgot-password.tsx
+│   ├── posts/                # Forum / Q&A
+│   │   ├── index.tsx         # list posts
+│   │   ├── [postId].tsx      # post detail + answers
+│   │   └── create.tsx
+│   ├── profile/
+│   │   ├── [userId].tsx      # user profile
+│   │   └── edit.tsx
+│   ├── store/                # ร้านค้าในเกม
+│   │   ├── index.tsx
+│   │   └── my-items.tsx
+│   ├── leaderboard/
+│   │   └── index.tsx
+│   ├── notifications/
+│   │   └── index.tsx
+│   └── admin/                # ส่วนของแอดมิน
+│       ├── categories.tsx
+│       ├── reports.tsx
+│       └── users.tsx
+│
+├── assets/                   # รูป / ไอคอน
+│   ├── icons/
+│   └── images/
+│
+├── convex/                   # ⚡ Convex backend
+│   ├── schema.ts             # schema ทั้งหมด
+│   ├── auth.ts               # auth functions
+│   ├── users.ts
+│   ├── posts.ts
+│   ├── answers.ts
+│   ├── coins.ts
+│   ├── streaks.ts
+│   ├── store.ts
+│   ├── categories.ts
+│   ├── notifications.ts
+│   ├── leaderboard.ts
+│   ├── moderation.ts
+│   └── admin.ts
+│
+├── node_modules/
+├── .gitignore
+├── app.json
+├── convex.json               # config convex
+├── eslint.config.js
+├── expo-env.d.ts
+├── package-lock.json
+├── package.json
+├── README.md
+└── tsconfig.json
