@@ -3,20 +3,21 @@ import { Home, BookOpen, Store, User, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useUser, SignOutButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isSignedIn } = useUser();
 
   const navItems = [
-    { id: "home", label: "Home", icon: Home, link: "/" },
-    { id: "posts", label: "Posts", icon: BookOpen, link: "/posts" },
-    { id: "store", label: "Store", icon: Store, link: "/store" },
-    { id: "profile", label: "Profile", icon: User, link: "/profile" },
+    { id: "home", label: "Home", icon: Home, link: "/", requireAuth: false },
+    { id: "posts", label: "Posts", icon: BookOpen, link: "/posts", requireAuth: true },
+    { id: "store", label: "Store", icon: Store, link: "/store", requireAuth: true },
+    { id: "profile", label: "Profile", icon: User, link: "/profile", requireAuth: true },
   ];
 
   useEffect(() => {
@@ -25,6 +26,16 @@ export default function Navbar() {
     else if (pathname.startsWith("/store")) setActiveTab("store");
     else if (pathname.startsWith("/profile")) setActiveTab("profile");
   }, [pathname]);
+
+  const handleNavClick = (item) => {
+    if (item.requireAuth && !isSignedIn) {
+      router.push("/sign-in");
+      return;
+    }
+    setActiveTab(item.id);
+    setMobileMenuOpen(false);
+    router.push(item.link);
+  };
 
   return (
     <>
@@ -55,30 +66,29 @@ export default function Navbar() {
                 const isActive = activeTab === item.id;
                 
                 return (
-                  <Link key={item.id} href={item.link}>
-                    <motion.button
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`relative flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${
-                        isActive 
-                          ? "text-[#C9984E] font-bold" 
-                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                      }`}
-                    >
-                      <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                      <span className="text-sm font-semibold">{item.label}</span>
-                      
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl -z-10 border-2 border-[#C9984E]/30"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                        />
-                      )}
-                    </motion.button>
-                  </Link>
+                  <motion.button
+                    key={item.id}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => handleNavClick(item)}
+                    className={`relative flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${
+                      isActive 
+                        ? "text-[#C9984E] font-bold" 
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                    <span className="text-sm font-semibold">{item.label}</span>
+                    
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl -z-10 border-2 border-[#C9984E]/30"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </motion.button>
                 );
               })}
 
@@ -139,22 +149,18 @@ export default function Navbar() {
                   const isActive = activeTab === item.id;
                   
                   return (
-                    <Link key={item.id} href={item.link}>
-                      <button
-                        onClick={() => {
-                          setActiveTab(item.id);
-                          setMobileMenuOpen(false);
-                        }}
-                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
-                          isActive
-                            ? "bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30"
-                            : "text-gray-600 hover:bg-gray-50"
-                        }`}
-                      >
-                        <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                        <span className="text-sm font-semibold">{item.label}</span>
-                      </button>
-                    </Link>
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item)}
+                      className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
+                        isActive
+                          ? "bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30"
+                          : "text-gray-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                      <span className="text-sm font-semibold">{item.label}</span>
+                    </button>
                   );
                 })}
 

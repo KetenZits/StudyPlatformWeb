@@ -1,41 +1,67 @@
 import { mutation, query } from "./_generated/server";
+import { v } from "convex/values";
 
-// ✅ Query user จาก DB
+export const getUserByEmail = query(async ({ db, auth }) => {
+  const identity = await auth.getUserIdentity();
+  if (!identity) return null;
+
+  // ใช้ email (มีใน schema)
+  return await db
+    .query("users")
+    .filter((q) => q.eq(q.field("email"), identity.email))
+    .first();
+});
+
 export const getCurrentUser = query(async ({ db, auth }) => {
   const identity = await auth.getUserIdentity();
   if (!identity) return null;
 
+  // ใช้ clerkId เป็น key
   return await db
     .query("users")
     .filter(q => q.eq(q.field("clerkId"), identity.subject))
     .first();
 });
 
-// ✅ Create user ใหม่
-export const createUser = mutation(
-  async ({ db, auth }, { name }: { name: string }) => {
-    const identity = await auth.getUserIdentity();
+// หรือถ้าใช้ clerkId แทน (จาก Clerk)
+export const getUserByClerkId = query(async ({ db, auth }) => {
+  const identity = await auth.getUserIdentity();
+  if (!identity) return null;
+
+  return await db
+    .query("users")
+    .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+    .first();
+});
+
+export const createUser = mutation({
+  args: {
+    clerkId: v.string(),
+    email: v.string(),
+    name: v.string(),
+    profilePic: v.optional(v.string()),
+    coins: v.number(),
+    answerStreak: v.number(),
+    bestStreak: v.number(),
+    role: v.string(),
+    banned: v.boolean(),
+    createdAt: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
-    const existing = await db
+    const existing = await ctx.db
       .query("users")
-      .filter(q => q.eq(q.field("clerkId"), identity.subject))
+      .filter(q => q.eq(q.field("clerkId"), args.clerkId))
       .first();
 
     if (existing) return existing;
 
-    return await db.insert("users", {
-        clerkId: identity.subject,
-        email: identity.email!,       // จาก JWT claim
-        name: name || identity.name!, // จาก JWT claim
-        profilePic: identity.profilePic ? String(identity.profilePic) : undefined,
-        coins: 0,
-        passwordHash: "",      // 👈 เพิ่ม
-        answerStreak: 0,       // 👈 เพิ่ม
-        bestStreak: 0,         // 👈 เพิ่ม
-        role: "user",          // 👈 เพิ่ม
-        banned: false,         // 👈 เพิ่ม
-        createdAt: Date.now(),
+    return await ctx.db.insert("users", {
+      ...args,
+      passwordHash: "", // ถ้า schema บังคับ
     });
-  }
-);
+  },
+});
+
