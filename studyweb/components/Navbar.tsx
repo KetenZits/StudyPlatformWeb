@@ -1,5 +1,5 @@
 "use client";
-import { Home, BookOpen, Store, User, Menu, X } from "lucide-react";
+import { Home, BookOpen, Store, User, Menu, X, MessageSquareText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";

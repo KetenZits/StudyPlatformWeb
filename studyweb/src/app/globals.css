@@ -16,3 +16,29 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+/* เลื่อน scrollbar ให้ดู modern ใสๆ */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* พื้นหลังใส */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2); /* สีขาวโปร่ง */
+  border-radius: 999px; /* กลมๆ modern */
+  border: 2px solid transparent; /* ทำให้ดูเหมือนลอย */
+  background-clip: padding-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4); /* hover สว่างขึ้น */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}

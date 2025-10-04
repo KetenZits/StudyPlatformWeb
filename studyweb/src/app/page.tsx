@@ -93,7 +93,7 @@ export default function Index() {
               </h1>
               
               <p className="text-gray-600 text-lg font-medium">
-                Let&apos;s continue your learning journey ✨
+                Let&apos;s continue your learning journey and keep Streak ✨
               </p>
             </div>
           </motion.div>
