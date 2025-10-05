@@ -4,8 +4,15 @@ import { motion } from "framer-motion";
 import React from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import { api } from "../../convex/_generated/api";
+import { useQuery } from "convex/react";
 
 export default function Index() {
+
+  const currentUser = useQuery(api.users.getCurrentUser);
+
+  console.log(currentUser)
+
 
   const recentPosts = [
     {
@@ -54,12 +61,29 @@ export default function Index() {
   ];
 
   const stats = [
-    { emoji: "🔥", label: "Your Streak", value: "5 Days", subtext: "Keep it up!", highlight: false },
-    { emoji: "⭐", label: "Best Answer Streak", value: "2", subtext: "In a row", highlight: false },
-    { emoji: "💰", label: "Coins", value: "120", subtext: "Spend wisely", highlight: true },
+    { 
+      emoji: "🔥",
+      label: "Your Streak",
+      value: currentUser?.answerStreak ?? 0,
+      subtext: "Streak",
+      highlight: false
+    },
+    { 
+      emoji: "⭐",
+      label: "Best Answer Streak", 
+      value: currentUser?.bestStreak ?? 0, 
+      subtext: "In a row", 
+      highlight: false 
+    },
+    { 
+      emoji: "💰", 
+      label: "Coins", 
+      value: currentUser?.coins ?? 0,
+      subtext: "Let spend now", 
+      highlight: true 
+    },
   ];
 
-  const userName = "Thanapon";
 
   return (
     <>
@@ -83,7 +107,7 @@ export default function Index() {
                 <span className="text-lg text-gray-600 font-medium">
                   Hello,{" "}
                   <span className="font-bold bg-gradient-to-r from-[#D4A574] to-[#B8873D] bg-clip-text text-transparent text-xl">
-                    {userName}
+                    {currentUser?.name ?? "There"}
                   </span>
                 </span>
               </div>
@@ -282,24 +306,6 @@ export default function Index() {
                     )}
                   </motion.div>
                 ))}
-              </div>
-
-              {/* Progress Bar Example */}
-              <div className="mt-8 pt-6 border-t border-gray-100">
-                <div className="mb-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-gray-700">Weekly Goal</span>
-                    <span className="text-sm font-bold text-[#C9984E]">3/5 days</span>
-                  </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: "60%" }}
-                      transition={{ delay: 0.8, duration: 1 }}
-                      className="h-full bg-gradient-to-r from-[#D4A574] to-[#C9984E] rounded-full"
-                    ></motion.div>
-                  </div>
-                </div>
               </div>
             </motion.div>
 

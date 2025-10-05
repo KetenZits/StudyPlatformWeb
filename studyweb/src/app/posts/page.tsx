@@ -103,7 +103,7 @@ export default function PostsPage() {
             <div>
               <span className="text-lg text-gray-600 font-medium">
                 Browse & Answer{" "}
-                <span className="font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent text-xl">
+                <span className="font-bold bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] bg-clip-text text-transparent text-xl">
                   Questions
                 </span>
               </span>
@@ -112,7 +112,7 @@ export default function PostsPage() {
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4 tracking-tight">
             Find & Answer{" "}
-            <span className="bg-gradient-to-r from-amber-600 via-orange-600 to-orange-700 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] bg-clip-text text-transparent">
               Posts
             </span>
           </h1>
@@ -139,7 +139,7 @@ export default function PostsPage() {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   {/* Avatar */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-md">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4A574] via-[#C9984E] to-[#B8873D] flex items-center justify-center shadow-md">
                     <span className="text-white font-bold text-sm">{post.avatar}</span>
                   </div>
                   {/* User Info */}
@@ -159,7 +159,7 @@ export default function PostsPage() {
 
               {/* Content */}
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#B8873D] transition-colors">
                   {post.title}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
@@ -170,14 +170,14 @@ export default function PostsPage() {
               {/* Footer */}
               <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-xl">
-                  <MessageSquareText size={16} className="text-orange-600" />
-                  <span className="text-sm font-bold text-orange-600">
+                  <MessageSquareText size={16} className="text-[#B8873D]" />
+                  <span className="text-sm font-bold text-[#B8873D]">
                     {post.answers} answers
                   </span>
                 </div>
 
                 <Link href={`/posts/${post.id}`}>
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:shadow-lg transition-all group-hover:gap-3">
+                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] text-white font-semibold hover:shadow-lg transition-all group-hover:gap-3">
                     <span className="text-sm">View</span>
                     <ChevronRight size={16} />
                   </button>

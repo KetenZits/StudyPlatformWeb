@@ -147,7 +147,7 @@ export default function ProfilePage() {
             <span className="text-5xl">👤</span>
             <div>
               <h1 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
-                Profile <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Overview</span>
+                Profile <span className="bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] bg-clip-text text-transparent">Overview</span>
               </h1>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function ProfilePage() {
             className="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 overflow-hidden"
           >
             {/* Cover with Gradient */}
-            <div className="h-40 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 relative">
+            <div className="h-40 bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] relative">
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iYSIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVHJhbnNmb3JtPSJyb3RhdGUoNDUpIj48cGF0aCBkPSJNLTEwIDMwaDYwdjJoLTYweiIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIuMDUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjYSkiLz48L3N2Zz4=')] opacity-50"></div>
             </div>
 
@@ -177,7 +177,7 @@ export default function ProfilePage() {
                 <div className="flex flex-col sm:flex-row sm:items-end gap-5">
                   {/* Avatar */}
                   <div className="relative w-fit">
-                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-2xl ring-4 ring-white overflow-hidden">
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-[#D4A574] via-[#C9984E] to-[#B8873D] flex items-center justify-center shadow-2xl ring-4 ring-white overflow-hidden">
                       {currentUser.profilePic ? (
                         <img src={currentUser.profilePic} alt={currentUser.name} className="w-full h-full object-cover" />
                       ) : (
@@ -206,7 +206,7 @@ export default function ProfilePage() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setIsEditing(!isEditing)}
-                  className="flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
+                  className="flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] text-white font-bold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
                 >
                   <Edit size={18} />
                   <span>Edit</span>
