@@ -6,10 +6,12 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { api } from "../../convex/_generated/api";
 import { useQuery } from "convex/react";
+import Link from "next/link";
 
 export default function Index() {
 
   const currentUser = useQuery(api.users.getCurrentUser);
+  const postsrecent = useQuery(api.posts.getPostsRecent)
 
   console.log(currentUser)
 
@@ -151,16 +153,18 @@ export default function Index() {
                   Ask the community and get instant answers from experts
                 </p>
 
+                <Link href={'/posts/create'}>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-white hover:bg-gray-50 shadow-xl transition-all group"
+                  className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-white hover:bg-gray-50 shadow-xl transition-all group cursor-pointer"
                 >
                   <span className="text-lg font-bold text-[#C9984E]">
                     Ask Now
                   </span>
                   <ArrowRight size={22} className="text-[#C9984E] group-hover:translate-x-2 transition-transform" />
                 </motion.button>
+                </Link>
               </div>
             </motion.div>
 
@@ -203,53 +207,96 @@ export default function Index() {
             <div>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Recent Questions</h2>
-                <button className="text-base font-bold text-[#C9984E] hover:text-[#B8873D] transition-colors px-4 py-2 rounded-xl hover:bg-amber-50/50">
-                  View All →
-                </button>
+                <Link href={'/posts'}>
+                  <button className="text-base font-bold text-[#C9984E] hover:text-[#B8873D] transition-colors px-4 py-2 rounded-xl hover:bg-amber-50/50 cursor-pointer">
+                    View All →
+                  </button>
+                </Link>
               </div>
 
               <div className="space-y-4">
-                {recentPosts.map((post, i) => (
+                {postsrecent?.slice(0, 5).map((post, i) => (
                   <motion.div
-                    key={post.id}
+                    key={post._id}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + i * 0.08 }}
                     whileHover={{ y: -3 }}
                     className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 cursor-pointer group"
                   >
+                    {/* Header */}
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex flex-col gap-3 flex-1">
+                        {/* Profile */}
                         <div className="flex items-center gap-3">
-                          <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200">
-                            <span className="text-xs font-bold text-amber-900">
-                              {post.categoryEmoji} {post.category}
-                            </span>
+                          {post.profilePic ? (
+                            <img
+                              src={post.profilePic}
+                              alt={post.username || "User"}
+                              className="w-10 h-10 rounded-full object-cover border border-amber-200 shadow-sm"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4A574] via-[#C9984E] to-[#B8873D] flex items-center justify-center text-white font-bold text-sm">
+                              {post.username?.[0]?.toUpperCase() ?? "U"}
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-bold text-gray-900 text-sm">{post.username ?? "Anonymous"}</p>
+                            <p className="text-xs text-gray-500">
+                              {new Date(post.createdAt).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </p>
                           </div>
-                          <span className="text-sm font-semibold text-gray-400">
-                            {post.time}
-                          </span>
                         </div>
 
-                        <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-[#C9984E] transition-colors">
-                          {post.title}
-                        </h3>
-                        <p className="text-base text-gray-600 leading-relaxed">
-                          {post.description}
-                        </p>
+                        {/* Category */}
+                        <div className="flex items-center gap-3 mt-1">
+                          <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200">
+                            <span className="text-xs font-bold text-amber-900">
+                              {post.category}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    {/* Image (optional) */}
+                    {post.imageUrl && (
+                      <div className="mb-4">
+                        <img
+                          src={post.imageUrl}
+                          alt="Post image"
+                          className="w-full h-48 object-cover rounded-xl border border-gray-100 shadow-sm"
+                        />
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <h3 className="text-xl font-bold text-gray-900 leading-tight mb-2 group-hover:text-[#C9984E] transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-base text-gray-600 leading-relaxed line-clamp-3">
+                      {post.body}
+                    </p>
+
+                    {/* Footer */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-4">
                       <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl">
                         <MessageCircle size={18} className="text-[#C9984E]" />
                         <span className="text-sm font-bold text-[#C9984E]">
-                          {post.answers} answers
+                          {post.answers ?? 0} answers
                         </span>
                       </div>
 
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center group-hover:from-[#C9984E] group-hover:to-[#B8873D] transition-all">
-                        <ChevronRight size={20} className="text-[#C9984E] group-hover:text-white transition-colors" />
+                        <ChevronRight
+                          size={20}
+                          className="text-[#C9984E] group-hover:text-white transition-colors"
+                        />
                       </div>
                     </div>
                   </motion.div>

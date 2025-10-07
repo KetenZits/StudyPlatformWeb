@@ -1,9 +1,12 @@
 "use client";
 import { motion } from "framer-motion";
-import { MessageSquareText, ChevronRight } from "lucide-react";
+import { MessageSquareText, ChevronRight, CirclePlus } from "lucide-react";
 import React, { useState } from "react";
 import Link from "next/link";
 import Navbar from "../../../components/Navbar";
+import Footer from "../../../components/Footer";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 // Mock data - ในของจริงจะดึงจาก DB
 const mockPosts = [
@@ -85,11 +88,22 @@ const categories = ["All", "Math", "Programming", "Biology", "Physics", "History
 
 export default function PostsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const posts = useQuery(api.posts.getAllPosts); 
+
+  if (posts === undefined) {
+    return <div>Loading...</div>; 
+  }
+
+  if (posts.length === 0) {
+    return <div>No posts yet 😢</div>;
+  }
+
+  console.log(posts)
 
   return (
   <>
     <Navbar/>
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-10">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 py-17">
       
       {/* Header Section */}
       <div className="max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-8">
@@ -120,15 +134,22 @@ export default function PostsPage() {
           <p className="text-gray-600 text-lg font-medium">
             Help others learn by sharing your knowledge ✨
           </p>
+
+          <Link href={`/posts/create`}>
+                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] text-white font-semibold hover:shadow-lg transition-all group-hover:gap-3 mt-5 cursor-pointer">
+                    <span className="text-xl">Create Post</span>
+                    <CirclePlus size={24}/>
+                  </button>
+                </Link>
         </motion.div>
       </div>
 
       {/* Posts Grid */}
       <div className="max-w-7xl mx-auto px-5 md:px-8 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {mockPosts.map((post, i) => (
+          {posts.map((post, i) => (
             <motion.div
-              key={post.id}
+              key={post._id}
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 + i * 0.05 }}
@@ -138,24 +159,44 @@ export default function PostsPage() {
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  {/* Avatar */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4A574] via-[#C9984E] to-[#B8873D] flex items-center justify-center shadow-md">
-                    <span className="text-white font-bold text-sm">{post.avatar}</span>
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-[#D4A574] via-[#C9984E] to-[#B8873D] flex items-center justify-center shadow-md">
+                    {post.avatar ? (
+                      <img
+                        src={post.avatar}
+                        alt={post.username || "User"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-white font-bold text-sm">
+                        {post.username?.[0]?.toUpperCase() ?? "U"}
+                      </span>
+                    )}
                   </div>
-                  {/* User Info */}
                   <div>
-                    <div className="font-bold text-gray-900 text-base">{post.username}</div>
-                    <div className="text-xs text-gray-500 font-medium">{post.time}</div>
+                    <div className="font-bold text-gray-900 text-base">
+                      {post.username ?? "Anonymous"}
+                    </div>
+                    <div className="text-xs text-gray-500 font-medium">
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
 
-                {/* Category Badge */}
-                <div className={`px-3 py-1.5 rounded-xl bg-gradient-to-r ${post.categoryColor} shadow-md`}>
+                <div className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-orange-400 to-yellow-500 shadow-md">
                   <span className="text-xs font-bold text-white">
-                    {post.categoryEmoji} {post.category}
+                    {post.category ?? "General"}
                   </span>
                 </div>
               </div>
+
+              {/* Image (optional) */}
+              {post.imageUrl && (
+                <img
+                  src={post.imageUrl}
+                  alt="Post Image"
+                  className="rounded-xl mb-4 max-h-60 w-full object-cover shadow-md"
+                />
+              )}
 
               {/* Content */}
               <div className="mb-4">
@@ -163,7 +204,7 @@ export default function PostsPage() {
                   {post.title}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-                  {post.description}
+                  {post.body}
                 </p>
               </div>
 
@@ -172,11 +213,11 @@ export default function PostsPage() {
                 <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-xl">
                   <MessageSquareText size={16} className="text-[#B8873D]" />
                   <span className="text-sm font-bold text-[#B8873D]">
-                    {post.answers} answers
+                    {post.answersCount ?? 0} answers
                   </span>
                 </div>
 
-                <Link href={`/posts/${post.id}`}>
+                <Link href={`/posts/${post._id}`}>
                   <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] text-white font-semibold hover:shadow-lg transition-all group-hover:gap-3">
                     <span className="text-sm">View</span>
                     <ChevronRight size={16} />
@@ -188,7 +229,8 @@ export default function PostsPage() {
         </div>
 
         {/* Load More Button */}
-        <motion.div
+        {posts.length > 10 && (
+          <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
@@ -198,8 +240,10 @@ export default function PostsPage() {
             Load More Posts
           </button>
         </motion.div>
+        )}
       </div>
     </div>
+    <Footer/>
     </>
   );
 }

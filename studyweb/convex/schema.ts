@@ -19,16 +19,16 @@ export default defineSchema({
     bestStreak: v.number(),
     lastBestAnswerDate: v.optional(v.string()),
 
-    role: v.string(), // "user", "admin", "moderator"
-    banned: v.boolean(), // true = login ใช้ไม่ได้
+    role: v.string(),
+    banned: v.boolean(), 
 
     createdAt: v.number(),
   }),
 
   // ================== CATEGORY ==================
   categories: defineTable({
-    name: v.string(), // เช่น คณิต, คอม, ฟิสิก
-    slug: v.string(), // เช่น math, cs, physics
+    name: v.string(), 
+    slug: v.string(), 
     createdAt: v.number(),
   }),
 
@@ -37,11 +37,12 @@ export default defineSchema({
     userId: v.id("users"),
     title: v.string(),
     body: v.string(),
-    categoryId: v.id("categories"),
+    category: v.string(),
     bestAnswerId: v.optional(v.id("answers")),
-    reported: v.boolean(), // true = มีการ report
-    hidden: v.boolean(),   // admin/mod ลบหรือซ่อนไปแล้ว
+    reported: v.boolean(), 
+    hidden: v.boolean(),   
     createdAt: v.number(),
+    imageStorageId: v.optional(v.id("_storage")),
   }),
 
   // ================== ANSWERS ==================
@@ -59,7 +60,7 @@ export default defineSchema({
     name: v.string(),
     description: v.string(),
     price: v.number(),
-    type: v.string(), // "badge", "title", "decoration"
+    type: v.string(), 
     createdAt: v.number(),
   }),
 
@@ -67,17 +68,17 @@ export default defineSchema({
   userItems: defineTable({
     userId: v.id("users"),
     itemId: v.id("storeItems"),
-    equipped: v.boolean(), // ใช้อยู่หรือไม่
+    equipped: v.boolean(), 
     createdAt: v.number(),
   }),
 
   // ================== REPORTS ==================
   reports: defineTable({
-    targetType: v.string(), // "post" | "answer" | "user"
+    targetType: v.string(), 
     targetId: v.union(v.id("posts"), v.id("answers"), v.id("users")),
     reporterId: v.id("users"),
     reason: v.string(),
-    status: v.string(), // "pending", "reviewed", "resolved"
+    status: v.string(), 
     createdAt: v.number(),
   }),
 });
