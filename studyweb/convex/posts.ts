@@ -88,3 +88,8 @@ export const getPostsRecent = query(async ({ db, storage }) => {
 export const generateUploadUrl = mutation(async ({ storage }) => {
   return await storage.generateUploadUrl();
 });
+
+export const getTotalPosts = query(async ({ db }) => {
+  const posts = await db.query("posts").collect();
+  return posts.length;
+});

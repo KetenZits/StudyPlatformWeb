@@ -81,4 +81,6 @@ export default defineSchema({
     status: v.string(), 
     createdAt: v.number(),
   }),
+
+  files: defineTable({}),
 });

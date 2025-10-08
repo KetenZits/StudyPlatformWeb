@@ -34,6 +34,11 @@ export const getUserByClerkId = query(async ({ db, auth }) => {
     .first();
 });
 
+export const getTotalUsers = query(async ({ db }) => {
+  const users = await db.query("users").collect();
+  return users.length;
+});
+
 export const createUser = mutation({
   args: {
     clerkId: v.string(),
@@ -65,3 +70,55 @@ export const createUser = mutation({
   },
 });
 
+
+// --- UPDATE USER PROFILE ---
+export const updateProfile = mutation({
+  args: {
+    name: v.optional(v.string()),
+    bio: v.optional(v.string()),
+    profilePic: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, {
+      ...(args.name && { name: args.name }),
+      ...(args.bio && { bio: args.bio }),
+      ...(args.profilePic && { profilePic: args.profilePic }),
+    });
+
+    return { success: true };
+  },
+});
+
+export const updateProfilePic = mutation({
+  args: { storageId: v.id("_storage") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!user) throw new Error("User not found");
+
+    const url = await ctx.storage.getUrl(args.storageId);
+
+    await ctx.db.patch(user._id, { profilePic: url ?? undefined });
+    return { success: true, url };
+  },
+});
+
+export const generateUploadUrl = mutation(async (ctx) => {
+  return await ctx.storage.generateUploadUrl();
+});

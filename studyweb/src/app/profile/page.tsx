@@ -7,6 +7,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const { user } = useUser();
@@ -14,11 +15,6 @@ export default function ProfilePage() {
   const createUser = useMutation(api.users.createUser);
   const [created, setCreated] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({
-    name: "",
-    email: "",
-    bio: "",
-  });
 
   // สร้าง user ใหม่ถ้ายังไม่มีใน DB
   useEffect(() => {
@@ -37,18 +33,6 @@ export default function ProfilePage() {
       }).then(() => setCreated(true));
     }
   }, [user, currentUser, createUser, created]);
-
-  // Set edit data เมื่อมีข้อมูล user
-  useEffect(() => {
-    if (currentUser) {
-      setEditData({
-        name: currentUser.name,
-        email: currentUser.email,
-        bio: currentUser.bio || "",
-      });
-    }
-  }, [currentUser]);
-
   // Format date
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
@@ -208,8 +192,10 @@ export default function ProfilePage() {
                   onClick={() => setIsEditing(!isEditing)}
                   className="flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-xl bg-gradient-to-r from-[#D4A574] via-[#C9984E] to-[#B8873D] text-white font-bold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto"
                 >
-                  <Edit size={18} />
-                  <span>Edit</span>
+                  <Link href={'/profile/edit'} className="flex justify-center items-center gap-4">
+                    <Edit size={18} />
+                    <span>Edit</span>
+                  </Link>
                 </motion.button>
               </div>
 
@@ -385,73 +371,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </motion.div>
-
-        {/* Edit Form */}
-        {isEditing && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-6 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8"
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h3>
-            
-            <div className="space-y-6">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                <input
-                  type="text"
-                  value={editData.name}
-                  onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  value={editData.email}
-                  onChange={(e) => setEditData({ ...editData, email: e.target.value })}
-                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              {/* Bio */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Bio</label>
-                <textarea
-                  value={editData.bio}
-                  onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
-                  rows={4}
-                  className="w-full px-5 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all resize-none"
-                  placeholder="Tell us about yourself..."
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    console.log("Save:", editData);
-                    setIsEditing(false);
-                  }}
-                  className="flex-1 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
-                >
-                  Save Changes
-                </button>
-                <button
-                  onClick={() => setIsEditing(false)}
-                  className="px-6 py-3.5 rounded-xl bg-gray-100 text-gray-700 font-bold hover:bg-gray-200 transition-all"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
       </div>
     </div>
     <Footer/>

@@ -288,7 +288,7 @@ export default function Index() {
                       <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl">
                         <MessageCircle size={18} className="text-[#C9984E]" />
                         <span className="text-sm font-bold text-[#C9984E]">
-                          {post.answers ?? 0} answers
+                          answers
                         </span>
                       </div>
 

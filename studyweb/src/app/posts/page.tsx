@@ -213,7 +213,7 @@ export default function PostsPage() {
                 <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-xl">
                   <MessageSquareText size={16} className="text-[#B8873D]" />
                   <span className="text-sm font-bold text-[#B8873D]">
-                    {post.answersCount ?? 0} answers
+                    {/* {post.answersCount ?? 0} answers */}
                   </span>
                 </div>
 
