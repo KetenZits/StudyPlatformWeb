@@ -9,6 +9,7 @@ export default defineSchema({
     passwordHash: v.string(),
     name: v.string(),
     profilePic: v.optional(v.string()),
+    profilePicStorageId: v.optional(v.id("_storage")),
     bio: v.optional(v.string()),
     googleId: v.optional(v.string()),
     coins: v.number(),
@@ -81,6 +82,4 @@ export default defineSchema({
     status: v.string(), 
     createdAt: v.number(),
   }),
-
-  files: defineTable({}),
 });

@@ -112,9 +112,22 @@ export const updateProfilePic = mutation({
 
     if (!user) throw new Error("User not found");
 
+    // ถ้ามีรูปเดิม ลบก่อน (optional)
+    if (user.profilePicStorageId) {
+      try {
+        await ctx.storage.delete(user.profilePicStorageId);
+      } catch (err) {
+        console.warn("⚠️ old pic not found, skip delete");
+      }
+    }
+
     const url = await ctx.storage.getUrl(args.storageId);
 
-    await ctx.db.patch(user._id, { profilePic: url ?? undefined });
+    await ctx.db.patch(user._id, {
+      profilePic: url ?? undefined,
+      profilePicStorageId: args.storageId,
+    });
+
     return { success: true, url };
   },
 });
