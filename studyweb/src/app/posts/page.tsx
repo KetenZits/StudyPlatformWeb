@@ -8,86 +8,8 @@ import Footer from "../../../components/Footer";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
-// Mock data - ในของจริงจะดึงจาก DB
-const mockPosts = [
-  {
-    id: 1,
-    username: "JohnDoe",
-    avatar: "JD",
-    title: "How to solve quadratic equations?",
-    description: "I want to know why the answer is this? Can someone explain step by step the process of solving quadratic equations using the formula?",
-    category: "Math",
-    categoryEmoji: "📐",
-    categoryColor: "from-blue-500 to-cyan-500",
-    time: "5m ago",
-    answers: 3,
-  },
-  {
-    id: 2,
-    username: "SarahTech",
-    avatar: "ST",
-    title: "Best way to learn React Native?",
-    description: "Looking for resources and tutorials for beginners. What are the essential concepts I should focus on first?",
-    category: "Programming",
-    categoryEmoji: "💻",
-    categoryColor: "from-purple-500 to-pink-500",
-    time: "12m ago",
-    answers: 7,
-  },
-  {
-    id: 3,
-    username: "BiologyGeek",
-    avatar: "BG",
-    title: "Photosynthesis process explanation",
-    description: "Need help understanding the light-dependent reactions. How does chlorophyll actually capture light energy?",
-    category: "Biology",
-    categoryEmoji: "🧬",
-    categoryColor: "from-green-500 to-emerald-500",
-    time: "1h ago",
-    answers: 2,
-  },
-  {
-    id: 4,
-    username: "PhysicsNerd",
-    avatar: "PN",
-    title: "Understanding quantum mechanics basics",
-    description: "Can someone explain the double-slit experiment in simple terms? I'm having trouble grasping the concept.",
-    category: "Physics",
-    categoryEmoji: "⚛️",
-    categoryColor: "from-orange-500 to-red-500",
-    time: "2h ago",
-    answers: 5,
-  },
-  {
-    id: 5,
-    username: "HistoryBuff",
-    avatar: "HB",
-    title: "World War II timeline question",
-    description: "What were the key turning points in World War II? I need to understand the major events that changed the course of the war.",
-    category: "History",
-    categoryEmoji: "📚",
-    categoryColor: "from-amber-500 to-yellow-500",
-    time: "3h ago",
-    answers: 8,
-  },
-  {
-    id: 6,
-    username: "ChemLover",
-    avatar: "CL",
-    title: "Balancing chemical equations help",
-    description: "I'm struggling with balancing complex chemical equations. Any tips or tricks to make this easier?",
-    category: "Chemistry",
-    categoryEmoji: "🧪",
-    categoryColor: "from-teal-500 to-cyan-500",
-    time: "4h ago",
-    answers: 4,
-  },
-];
-
-const categories = ["All", "Math", "Programming", "Biology", "Physics", "History", "Chemistry"];
 
 export default function PostsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const posts = useQuery(api.posts.getAllPosts); 
 
   if (posts === undefined) {
@@ -213,7 +135,7 @@ export default function PostsPage() {
                 <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-xl">
                   <MessageSquareText size={16} className="text-[#B8873D]" />
                   <span className="text-sm font-bold text-[#B8873D]">
-                    {/* {post.answersCount ?? 0} answers */}
+                    {post.answersCount ?? 0} answers
                   </span>
                 </div>
 

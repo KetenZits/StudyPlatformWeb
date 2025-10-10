@@ -16,14 +16,12 @@ export const getCurrentUser = query(async ({ db, auth }) => {
   const identity = await auth.getUserIdentity();
   if (!identity) return null;
 
-  // ใช้ clerkId เป็น key
   return await db
     .query("users")
     .filter(q => q.eq(q.field("clerkId"), identity.subject))
     .first();
 });
 
-// หรือถ้าใช้ clerkId แทน (จาก Clerk)
 export const getUserByClerkId = query(async ({ db, auth }) => {
   const identity = await auth.getUserIdentity();
   if (!identity) return null;
@@ -65,7 +63,7 @@ export const createUser = mutation({
 
     return await ctx.db.insert("users", {
       ...args,
-      passwordHash: "", // ถ้า schema บังคับ
+      passwordHash: "", 
     });
   },
 });
@@ -112,7 +110,6 @@ export const updateProfilePic = mutation({
 
     if (!user) throw new Error("User not found");
 
-    // ถ้ามีรูปเดิม ลบก่อน (optional)
     if (user.profilePicStorageId) {
       try {
         await ctx.storage.delete(user.profilePicStorageId);

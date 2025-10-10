@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import Navbar from "../../../../components/Navbar";
 import Footer from "../../../../components/Footer";
+import ProfilePicEditor from "../../../../components/ProfilePicEditor";
 
 export default function EditProfilePage() {
   const currentUser = useQuery(api.users.getCurrentUser);
@@ -18,7 +19,7 @@ export default function EditProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentUser?.profilePic || null);
 
   // Set initial values when user data loads
   useEffect(() => {
@@ -178,44 +179,26 @@ export default function EditProfilePage() {
               Profile Picture
             </label>
 
-            <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="flex flex-col items-center gap-6">
               {/* Avatar Preview */}
-              <div className="relative">
-                <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg overflow-hidden">
-                  {previewUrl ? (
-                    <img src={previewUrl} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-white font-black text-4xl">{getInitials(name || currentUser.name)}</span>
-                  )}
-                </div>
-                
-                {/* Camera Icon Overlay */}
-                <label className="absolute bottom-0 right-0 w-10 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center cursor-pointer hover:shadow-lg transition-all">
-                  <Camera size={18} className="text-white" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUpload}
-                    className="hidden"
-                    disabled={isUploading}
-                  />
-                </label>
-              </div>
+                <ProfilePicEditor
+                  currentImage={previewUrl}
+                  onImageSelect={(tempUrl) => {
+                    // Preview ทันทีตอนเลือกรูป
+                    setPreviewUrl(tempUrl);
+                  }}
+                  onSave={async (finalUrl, storageId) => {
+                    // Update preview ด้วยรูปที่ crop แล้ว
+                    setPreviewUrl(finalUrl);
+                    // เรียก Convex mutation
+                    await updateProfilePic({ storageId });
+                    setStatus({ type: "success", message: "Profile picture updated!" });
+                  }}
+                />
 
               {/* Upload Info */}
               <div className="flex-1 text-center sm:text-left">
-                <label className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold cursor-pointer transition-all">
-                  <Upload size={18} />
-                  <span>{isUploading ? "Uploading..." : "Upload New Photo"}</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUpload}
-                    className="hidden"
-                    disabled={isUploading}
-                  />
-                </label>
-                <p className="text-sm text-gray-500 mt-3">
+                <p className="text-sm text-gray-500">
                   JPG, PNG or GIF. Max size 5MB
                 </p>
               </div>

@@ -13,48 +13,6 @@ export default function Index() {
   const currentUser = useQuery(api.users.getCurrentUser);
   const postsrecent = useQuery(api.posts.getPostsRecent)
 
-  console.log(currentUser)
-
-
-  const recentPosts = [
-    {
-      id: 1,
-      title: 'How to solve quadratic equations?',
-      description: 'I want to know why the answer is this? Can someone explain step by step?',
-      category: 'Math',
-      categoryEmoji: '📐',
-      time: '5m ago',
-      answers: 3,
-    },
-    {
-      id: 2,
-      title: 'Best way to learn React Native?',
-      description: 'Looking for resources and tutorials for beginners.',
-      category: 'Programming',
-      categoryEmoji: '💻',
-      time: '12m ago',
-      answers: 7,
-    },
-    {
-      id: 3,
-      title: 'Photosynthesis process explanation',
-      description: 'Need help understanding the light-dependent reactions.',
-      category: 'Biology',
-      categoryEmoji: '🧬',
-      time: '1h ago',
-      answers: 2,
-    },
-    {
-      id: 4,
-      title: 'Understanding quantum mechanics basics',
-      description: 'Can someone explain the double-slit experiment in simple terms?',
-      category: 'Physics',
-      categoryEmoji: '⚛️',
-      time: '2h ago',
-      answers: 5,
-    },
-  ];
-
   const paths = [
     { icon: TrendingUp, emoji: "🔥", title: "Hot Questions", subtitle: "Trending now", color: "from-orange-500 to-red-500" },
     { icon: Clock, emoji: "🕒", title: "Recent", subtitle: "Latest posts", color: "from-blue-500 to-cyan-500" },
@@ -288,16 +246,18 @@ export default function Index() {
                       <div className="flex items-center gap-2 bg-amber-50 px-4 py-2 rounded-xl">
                         <MessageCircle size={18} className="text-[#C9984E]" />
                         <span className="text-sm font-bold text-[#C9984E]">
-                          answers
+                          {post.answersCount ?? 0} answers
                         </span>
                       </div>
 
+                      <Link href={`/posts/${post._id}`}>
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center group-hover:from-[#C9984E] group-hover:to-[#B8873D] transition-all">
                         <ChevronRight
                           size={20}
                           className="text-[#C9984E] group-hover:text-white transition-colors"
                         />
                       </div>
+                      </Link>
                     </div>
                   </motion.div>
                 ))}

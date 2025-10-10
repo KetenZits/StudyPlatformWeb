@@ -5,8 +5,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useUser, SignOutButton } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
+
 
 export default function Navbar() {
+
+  const currentUser = useQuery(api.users.getCurrentUser);
   const pathname = usePathname();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("");
@@ -91,24 +96,35 @@ export default function Navbar() {
                   </motion.button>
                 );
               })}
-
+            
               {/* Auth Buttons */}
-              {!isSignedIn ? (
-                <>
-                  <Link href="/sign-in" className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
-                    Sign In
-                  </Link>
-                  <Link href="/sign-up" className="px-4 py-2 rounded-xl bg-gradient-to-bl from-amber-700 to-amber-600 text-white">
-                    Sign Up
-                  </Link>
-                </>
-              ) : (
-                <SignOutButton>
-                  <button className="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
-                    Logout
-                  </button>
-                </SignOutButton>
-              )}
+                {!isSignedIn ? (
+                  <>
+                    <Link href="/sign-in" className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
+                      Sign In
+                    </Link>
+                    <Link href="/sign-up" className="px-4 py-2 rounded-xl bg-gradient-to-bl from-amber-700 to-amber-600 text-white">
+                      Sign Up
+                    </Link>
+                  </>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    {currentUser?.profilePic && (
+                      <Link href="/profile">
+                        <img
+                          src={currentUser.profilePic}
+                          alt="avatar"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-[#C9984E] cursor-pointer hover:scale-105 transition-transform"
+                        />
+                      </Link>
+                    )}
+                    <SignOutButton>
+                      <button className="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
+                        Logout
+                      </button>
+                    </SignOutButton>
+                  </div>
+                )}
             </div>
           </div>
         </div>
@@ -164,26 +180,37 @@ export default function Navbar() {
                   );
                 })}
 
+                <div className="flex justify-center w-full">
                 {!isSignedIn ? (
+                  <div>
                   <>
-                    <Link href="/sign-in">
-                      <button className="w-full px-4 py-3 rounded-xl my-2 bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
-                        Sign In
-                      </button>
+                    <Link href="/sign-in" className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white mx-1">
+                      Sign In
                     </Link>
-                    <Link href="/sign-up">
-                      <button className="w-full px-4 py-3 rounded-xl my-2 bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
-                        Sign Up
-                      </button>
+                    <Link href="/sign-up" className="px-4 py-2 rounded-xl bg-gradient-to-bl from-amber-700 to-amber-600 text-white mx-1">
+                      Sign Up
                     </Link>
                   </>
+                  </div>
                 ) : (
-                  <SignOutButton>
-                    <button className="w-full px-4 py-3 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
-                      Logout
-                    </button>
-                  </SignOutButton>
+                  <div className="flex items-center gap-4">
+                    {currentUser?.profilePic && (
+                      <Link href="/profile">
+                        <img
+                          src={currentUser.profilePic}
+                          alt="avatar"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-[#C9984E] cursor-pointer hover:scale-105 transition-transform"
+                        />
+                      </Link>
+                    )}
+                    <SignOutButton>
+                      <button className="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-700">
+                        Logout
+                      </button>
+                    </SignOutButton>
+                  </div>
                 )}
+                </div>
               </div>
             </motion.div>
           )}

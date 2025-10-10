@@ -43,26 +43,35 @@ export const getAllPosts = query(async ({ db, storage }) => {
 
   const postsWithDetails = await Promise.all(
     posts.map(async (post) => {
-      // ดึงข้อมูล user ที่สร้างโพสต์นี้
+      // ดึงข้อมูล user
       const user = await db.get(post.userId);
 
-      // ดึง URL ของรูป (ถ้ามี)
+      // ดึง URL ของรูป
       let imageUrl = null;
       if (post.imageStorageId) {
         imageUrl = await storage.getUrl(post.imageStorageId);
       }
+
+      // นับจำนวน answers
+      const answers = await db
+        .query("answers")
+        .filter((q) => q.eq(q.field("postId"), post._id))
+        .collect();
 
       return {
         ...post,
         imageUrl,
         username: user?.name || "Anonymous",
         avatar: user?.profilePic || "👤",
+        answersCount: answers.length,
       };
     })
   );
 
   return postsWithDetails;
 });
+
+
 
 export const getPostsRecent = query(async ({ db, storage }) => {
   const posts = await db
@@ -77,8 +86,13 @@ export const getPostsRecent = query(async ({ db, storage }) => {
         imageUrl = await storage.getUrl(post.imageStorageId);
       }
 
+      const answers = await db
+        .query("answers")
+        .filter((q) => q.eq(q.field("postId"), post._id))
+        .collect();
+
       const user = await db.get(post.userId);
-      return { ...post, imageUrl, username: user?.name, profilePic: user?.profilePic };
+      return { ...post, imageUrl, username: user?.name, profilePic: user?.profilePic, answersCount: answers.length, };
     })
   );
 
@@ -92,4 +106,28 @@ export const generateUploadUrl = mutation(async ({ storage }) => {
 export const getTotalPosts = query(async ({ db }) => {
   const posts = await db.query("posts").collect();
   return posts.length;
+});
+
+
+export const getPostById = query({
+  args: { postId: v.id("posts") },
+  handler: async ({ db, storage }, { postId }) => {
+    const post = await db.get(postId);
+    if (!post) return null;
+
+    // ดึง user (author)
+    const author = await db.get(post.userId);
+
+    // ดึงภาพจาก storage ถ้ามี
+    let imageUrl = null;
+    if (post.imageStorageId) {
+      imageUrl = await storage.getUrl(post.imageStorageId);
+    }
+
+    return {
+      ...post,
+      author,
+      imageUrl,
+    };
+  },
 });
