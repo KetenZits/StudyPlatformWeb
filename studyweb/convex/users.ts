@@ -132,3 +132,53 @@ export const updateProfilePic = mutation({
 export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
+
+export const getUserOverview = query({
+  args: { userId: v.string() },
+  handler: async ({ db }, { userId }) => {
+    
+    const user = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), userId))
+      .first();
+
+    if (!user) throw new Error("User not found");
+
+    
+    const questions = await db
+      .query("posts")
+      .filter((q) => q.eq(q.field("userId"), user._id))
+      .collect();
+    const questionsCount = questions.length;
+
+    
+    const answers = await db
+      .query("answers")
+      .filter((q) => q.eq(q.field("userId"), user._id))
+      .collect();
+    const answersCount = answers.length;
+
+    
+    const bestAnswers = await db
+      .query("posts")
+      .filter((q) => q.not(q.eq(q.field("bestAnswerId"), null)))
+      .collect();
+
+    const bestCount = bestAnswers.filter(
+      (post) => post.bestAnswerId && answers.find((a) => a._id === post.bestAnswerId)
+    ).length;
+
+    
+    let helpfulVotes = 0;
+    for (const ans of answers) {
+      helpfulVotes += ans.likes ? ans.likes.length : 0;
+    }
+
+    return {
+      questionsCount,
+      answersCount,
+      bestCount,
+      helpfulVotes,
+    };
+  },
+});

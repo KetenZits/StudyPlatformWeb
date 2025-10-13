@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import { Id } from "../../../../convex/_generated/dataModel";
 import Navbar from "../../../../components/Navbar";
 import Footer from "../../../../components/Footer";
+import MarkAsBestButton from "../../../../components/MarkAsBestButton";
+import LikeButton from "../../../../components/LikeButton";
 
 export default function PostDetailPage() {
   const params = useParams();
@@ -18,6 +20,7 @@ export default function PostDetailPage() {
   const answers = useQuery(api.answers.getAnswersByPostId, { postId });
   const currentUser = useQuery(api.users.getCurrentUser);
   const createAnswer = useMutation(api.answers.createAnswer);
+  const markAsBest = useMutation(api.answers.markAsBestAnswer);
 
   const [answerText, setAnswerText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -264,7 +267,7 @@ export default function PostDetailPage() {
                     <div className="flex items-center gap-2 bg-purple-50 px-3 py-1.5 rounded-lg">
                       <ThumbsUp size={14} className="text-purple-600" />
                       <span className="text-sm font-bold text-purple-600">
-                        {answer.upvotes || 0}
+                        {answer.likes?.length || 0}
                       </span>
                     </div>
                   </div>
@@ -276,16 +279,14 @@ export default function PostDetailPage() {
 
                   {/* Answer Actions */}
                   <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-600 font-semibold transition-all text-sm">
-                      <ThumbsUp size={16} />
-                      <span>Helpful</span>
-                    </button>
+                    <LikeButton answer={answer} currentUser={currentUser} />
                     
                     {currentUser?._id === post.userId && answer._id !== post.bestAnswerId && (
-                      <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 font-semibold transition-all text-sm">
-                        <CheckCircle size={16} />
-                        <span>Mark as Best</span>
-                      </button>
+                      <MarkAsBestButton
+                        post={post}
+                        answer={answer}
+                        currentUser={currentUser}
+                      />
                     )}
                   </div>
                 </motion.div>

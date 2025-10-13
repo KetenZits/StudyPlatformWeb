@@ -54,6 +54,7 @@ export default defineSchema({
     reported: v.boolean(),
     hidden: v.boolean(),
     createdAt: v.number(),
+    likes: v.optional(v.array(v.id("users"))),
   }),
 
   // ================== STORE ITEMS ==================

@@ -11,10 +11,12 @@ import Link from "next/link";
 
 export default function ProfilePage() {
   const { user } = useUser();
+  const userId = user?.id;
   const currentUser = useQuery(api.users.getCurrentUser);
   const createUser = useMutation(api.users.createUser);
   const [created, setCreated] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const overview = useQuery(api.users.getUserOverview, { userId });
 
   // สร้าง user ใหม่ถ้ายังไม่มีใน DB
   useEffect(() => {
@@ -353,10 +355,10 @@ export default function ProfilePage() {
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: "Questions Asked", value: "12", icon: "❓", color: "from-blue-400 to-cyan-500" },
-                { label: "Answers Given", value: "45", icon: "✅", color: "from-green-400 to-emerald-500" },
-                { label: "Best Answers", value: "8", icon: "⭐", color: "from-yellow-400 to-orange-500" },
-                { label: "Helpful Votes", value: "127", icon: "👍", color: "from-pink-400 to-rose-500" },
+                { label: "Questions Asked", value: overview?.questionsCount, icon: "❓", color: "from-blue-400 to-cyan-500" },
+                { label: "Answers Given", value: overview?.answersCount, icon: "✅", color: "from-green-400 to-emerald-500" },
+                { label: "Best Answers", value: overview?.bestCount, icon: "⭐", color: "from-yellow-400 to-orange-500" },
+                { label: "Helpful Votes", value: overview?.helpfulVotes, icon: "👍", color: "from-pink-400 to-rose-500" },
               ].map((stat, i) => (
                 <motion.div
                   key={i}
