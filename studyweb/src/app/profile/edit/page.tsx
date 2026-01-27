@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { Save, X, Upload, User, FileText, Camera, Loader2 } from "lucide-react";
+import { Save, X, User, FileText, Loader2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
@@ -11,13 +11,11 @@ import ProfilePicEditor from "../../../../components/ProfilePicEditor";
 export default function EditProfilePage() {
   const currentUser = useQuery(api.users.getCurrentUser);
   const updateProfile = useMutation(api.users.updateProfile);
-  const generateUploadUrl = useMutation(api.users.generateUploadUrl);
   const updateProfilePic = useMutation(api.users.updateProfilePic);
 
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentUser?.profilePic || null);
 
@@ -29,16 +27,6 @@ export default function EditProfilePage() {
       setPreviewUrl(currentUser.profilePic || null);
     }
   }, [currentUser]);
-
-  // Get initials for avatar
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,46 +46,6 @@ export default function EditProfilePage() {
       setStatus({ type: "error", message: "Failed to update profile" });
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Check file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setStatus({ type: "error", message: "File size must be less than 5MB" });
-      return;
-    }
-
-    setIsUploading(true);
-    setStatus({ type: "", message: "" });
-
-    try {
-      // Create preview
-      const preview = URL.createObjectURL(file);
-      setPreviewUrl(preview);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      // Upload to your API
-      const res = await fetch("/api/uploadProfilePic", {
-        method: "POST",
-        body: formData,
-      });
-
-      const { storageId } = await res.json();
-
-      // Update in Convex
-      await updateProfilePic({ storageId });
-      setStatus({ type: "success", message: "Profile picture uploaded successfully!" });
-    } catch (err) {
-      console.error(err);
-      setStatus({ type: "error", message: "Failed to upload picture" });
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -180,17 +128,16 @@ export default function EditProfilePage() {
             </label>
 
             <div className="flex flex-col items-center gap-6">
-              {/* Avatar Preview */}
+              {/* Avatar Preview & Editor */}
                 <ProfilePicEditor
                   currentImage={previewUrl}
                   onImageSelect={(tempUrl) => {
-                    // Preview ทันทีตอนเลือกรูป
                     setPreviewUrl(tempUrl);
                   }}
                   onSave={async (finalUrl, storageId) => {
-                    // Update preview ด้วยรูปที่ crop แล้ว
+                    // Update preview logic
                     setPreviewUrl(finalUrl);
-                    // เรียก Convex mutation
+                    // Update in Convex
                     await updateProfilePic({ storageId });
                     setStatus({ type: "success", message: "Profile picture updated!" });
                   }}

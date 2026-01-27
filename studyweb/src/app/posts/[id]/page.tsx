@@ -32,12 +32,14 @@ export default function PostDetailPage() {
 
     setIsSubmitting(true);
     try {
-      await createAnswer({
+      const res = await createAnswer({
         postId,
         body: answerText,
       });
+
       setAnswerText("");
-      alert("Answer posted successfully!");
+      alert(`🔥 ตอบสำเร็จ! ตอนนี้ streak มึงคือ ${res.streak} วันติดแล้ว`);
+
     } catch (error) {
       console.error("Error posting answer:", error);
       alert("Failed to post answer");

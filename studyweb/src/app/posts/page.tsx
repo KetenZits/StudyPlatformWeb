@@ -7,13 +7,60 @@ import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { BookOpen, Loader2 } from "lucide-react";
 
 
 export default function PostsPage() {
   const posts = useQuery(api.posts.getAllPosts); 
 
   if (posts === undefined) {
-    return <div>Loading...</div>; 
+    return (
+      <>
+      <Navbar/>
+      <div className="flex flex-col items-center justify-center h-screen gap-6">
+        <div className="relative flex items-center justify-center">
+          
+          {/* วงแหวนที่ 1: หมุนตามเข็มนาฬิกา (สีส้ม Theme หลัก) */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            className="absolute w-24 h-24 rounded-full border-t-4 border-r-4 border-orange-500/30 border-t-orange-500 border-r-transparent"
+          />
+
+          {/* วงแหวนที่ 2: หมุนทวนเข็มนาฬิกา (สีฟ้า สื่อถึงปัญญา/การเรียนรู้) */}
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="absolute w-16 h-16 rounded-full border-b-4 border-l-4 border-blue-500/30 border-b-blue-500 border-l-transparent"
+          />
+
+          {/* ไอคอนตรงกลาง: Effect หายใจ (Scale Up/Down) */}
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="relative z-10 bg-white p-3 rounded-full shadow-sm"
+          >
+            <BookOpen className="w-8 h-8 text-orange-600" />
+          </motion.div>
+          
+          {/* Background Glow จางๆ */}
+          <div className="absolute inset-0 bg-orange-400/20 blur-xl rounded-full animate-pulse"></div>
+        </div>
+
+        {/* Loading Text */}
+        <motion.div
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 1 }}
+           transition={{ duration: 0.5 }}
+           className="text-center space-y-2"
+        >
+          <h3 className="text-lg font-bold text-gray-700">Gathering Knowledge...</h3>
+          <p className="text-sm text-gray-400">Prepare Post for you.</p>
+        </motion.div>
+      </div>
+      <Footer/>
+      </>
+    );
   }
 
   if (posts.length === 0) {

@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as answers from "../answers.js";
 import type * as posts from "../posts.js";
+import type * as store from "../store.js";
 import type * as users from "../users.js";
 
 /**
@@ -28,6 +29,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   answers: typeof answers;
   posts: typeof posts;
+  store: typeof store;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

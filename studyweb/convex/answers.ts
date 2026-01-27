@@ -1,6 +1,7 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
+import { time } from "console";
 
 export const getAnswersByPostId = query({
   args: { postId: v.id("posts") },
@@ -34,7 +35,7 @@ export const createAnswer = mutation({
   },
   handler: async ({ db, auth }, { postId, body }) => {
     const identity = await auth.getUserIdentity();
-    if (!identity) throw new Error("Not authenticated");
+    if (!identity) throw new Error("Unauthorized");
 
     const user = await db
       .query("users")
@@ -43,14 +44,78 @@ export const createAnswer = mutation({
 
     if (!user) throw new Error("User not found");
 
+    const now = new Date(); // เวลาปัจจุบันจริงๆ
+    
+    // บันทึก Answer ลง DB
     await db.insert("answers", {
-      userId: user._id,
       postId,
+      userId: user._id,
       body,
-      reported: false, // ค่า default
-      hidden: false,   // ค่า default
-      createdAt: Date.now(), // timestamp ปัจจุบัน
+      reported: false,
+      hidden: false,
+      createdAt: now.getTime(),
     });
+
+    // --- เริ่ม LOGIC STREAK ใหม่ ---
+    
+    // 1. สร้าง Helper function เพื่อหาวันที่แบบตัดเวลาออก (เที่ยงคืนของวันนั้น)
+    // ใช้ UTC เพื่อความชัวร์ หรือใช้ Local ตาม Server ก็ได้ แต่วิธีนี้จะไม่กระทบตัวแปร original
+    const getStartOfDay = (date: Date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      return d.getTime();
+    };
+
+    const currentDay = getStartOfDay(now);
+    const lastAnswerDate = user.lastAnswerDate ? new Date(user.lastAnswerDate) : null;
+    const lastAnswerDay = lastAnswerDate ? getStartOfDay(lastAnswerDate) : null;
+
+    let newStreak = 1;
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+    if (lastAnswerDay !== null) {
+      const diffTime = currentDay - lastAnswerDay;
+      const diffDays = Math.floor(diffTime / ONE_DAY_MS);
+
+      if (diffDays === 0) {
+        // ตอบภายในวันเดียวกัน -> Streak เท่าเดิม
+        newStreak = user.answerStreak;
+      } else if (diffDays === 1) {
+        // ตอบวันถัดมา (เมื่อวานตอบ วันนี้ตอบ) -> Streak + 1
+        newStreak = user.answerStreak + 1;
+      } else {
+        // ห่างไปมากกว่า 1 วัน (เช่น ตอบมะรืน) -> Streak ขาด เริ่มนับ 1 ใหม่
+        newStreak = 1;
+      }
+    } else {
+      // ไม่เคยตอบมาก่อน เริ่มนับ 1
+      newStreak = 1;
+    }
+
+    // --- คำนวณเวลาที่เหลือจนกว่าจะหมดวัน (Optional) ---
+    // เป้าหมายคือบอกว่า "เหลือเวลาอีกกี่ชั่วโมงก่อนจะหมดวันนี้"
+    const nextMidnight = new Date(now);
+    nextMidnight.setHours(24, 0, 0, 0); // เที่ยงคืนของวันพรุ่งนี้
+    const msLeft = nextMidnight.getTime() - now.getTime();
+    
+    const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60));
+    const minutesLeft = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+    // Update User
+    await db.patch(user._id, {
+      answerStreak: newStreak,
+      lastAnswerDate: now.toISOString(), // บันทึกเวลาปัจจุบันจริงๆ ไม่ใช่เที่ยงคืน
+      bestStreak: Math.max(user.bestStreak || 0, newStreak),
+    });
+
+    return {
+      success: true,
+      streak: newStreak,
+      timeLeft: { 
+        hoursLeft,
+        minutesLeft 
+      },
+    };
   },
 });
 
@@ -130,3 +195,4 @@ export const toggleLikeAnswer = mutation({
     return { success: true, liked: !hasLiked };
   },
 });
+

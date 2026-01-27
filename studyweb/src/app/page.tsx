@@ -7,11 +7,29 @@ import Footer from "../../components/Footer";
 import { api } from "../../convex/_generated/api";
 import { useQuery } from "convex/react";
 import Link from "next/link";
+import Marquee from "react-fast-marquee";
 
 export default function Index() {
 
   const currentUser = useQuery(api.users.getCurrentUser);
   const postsrecent = useQuery(api.posts.getPostsRecent)
+
+  const timeLeft = React.useMemo(() => {
+    if (!currentUser?.lastAnswerDate) return null;
+    
+    const lastAnswerDate = new Date(currentUser.lastAnswerDate);
+    const now = new Date();
+    const nextMidnight = new Date(lastAnswerDate);
+    nextMidnight.setDate(nextMidnight.getDate() + 1);
+    nextMidnight.setHours(24, 0, 0, 0);
+    
+    const msLeft = nextMidnight.getTime() - now.getTime();
+    
+    return {
+      hoursLeft: Math.floor(msLeft / (1000 * 60 * 60)),
+      minutesLeft: Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60))
+    };
+  }, [currentUser?.lastAnswerDate]);
 
   const paths = [
     { icon: TrendingUp, emoji: "🔥", title: "Hot Questions", subtitle: "Trending now", color: "from-orange-500 to-red-500" },
@@ -44,6 +62,9 @@ export default function Index() {
     },
   ];
 
+  
+
+  console.log(timeLeft);
 
   return (
     <>
@@ -172,7 +193,8 @@ export default function Index() {
                 </Link>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-row justify-between h-full">
+                <Marquee pauseOnHover={true} gradient={true} speed={50} gradientColor="#FFF7ED" gradientWidth={50}>
                 {postsrecent?.slice(0, 5).map((post, i) => (
                   <motion.div
                     key={post._id}
@@ -180,7 +202,7 @@ export default function Index() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + i * 0.08 }}
                     whileHover={{ y: -3 }}
-                    className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 cursor-pointer group"
+                    className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 cursor-pointer group w-96 mx-5"
                   >
                     {/* Header */}
                     <div className="flex justify-between items-start mb-4">
@@ -223,7 +245,7 @@ export default function Index() {
                     </div>
 
                     {/* Image (optional) */}
-                    {post.imageUrl && (
+                    {/* {post.imageUrl && (
                       <div className="mb-4">
                         <img
                           src={post.imageUrl}
@@ -231,14 +253,21 @@ export default function Index() {
                           className="w-full h-48 object-cover rounded-xl border border-gray-100 shadow-sm"
                         />
                       </div>
-                    )}
+                    )} */}
 
                     {/* Content */}
                     <h3 className="text-xl font-bold text-gray-900 leading-tight mb-2 group-hover:text-[#C9984E] transition-colors">
                       {post.title}
                     </h3>
                     <p className="text-base text-gray-600 leading-relaxed line-clamp-3">
-                      {post.body}
+                      {post.body.length > 40
+                        ? (
+                          <>
+                            {post.body.slice(0, 40)}
+                            <span className="text-gray-900 font-bold">...</span>
+                          </>
+                        )
+                        : post.body}
                     </p>
 
                     {/* Footer */}
@@ -261,6 +290,7 @@ export default function Index() {
                     </div>
                   </motion.div>
                 ))}
+                </Marquee>
               </div>
             </div>
 

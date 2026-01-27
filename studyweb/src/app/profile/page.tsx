@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { Edit, Mail, Calendar, Award, Flame, TrendingUp, Coins, Shield, Ban, Loader2, User2, Trophy, Star, Target, Zap } from "lucide-react";
+import { Edit, Mail, Calendar, Award, Flame, TrendingUp, Coins, Shield, Ban, Loader2, User2, Trophy, Star, Target, Zap, Backpack } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
@@ -16,7 +16,24 @@ export default function ProfilePage() {
   const createUser = useMutation(api.users.createUser);
   const [created, setCreated] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const overview = useQuery(api.users.getUserOverview, { userId });
+  
+  const overview = useQuery(
+    api.users.getUserOverview,
+    { userId },
+    { enabled: !!userId }
+  );
+  
+  // Store & Inventory
+  const myItems = useQuery(api.store.getUserItems, currentUser ? { userId: currentUser._id } : "skip");
+  const toggleEquip = useMutation(api.store.toggleEquip);
+
+  const handleEquip = async (userItemId: any) => {
+      try {
+          await toggleEquip({ userItemId });
+      } catch (err) {
+          console.error("Failed to equip item", err);
+      }
+  }
 
   // สร้าง user ใหม่ถ้ายังไม่มีใน DB
   useEffect(() => {
@@ -35,6 +52,7 @@ export default function ProfilePage() {
       }).then(() => setCreated(true));
     }
   }, [user, currentUser, createUser, created]);
+
   // Format date
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
@@ -145,7 +163,7 @@ export default function ProfilePage() {
         {/* Main Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          {/* Left - Profile Card (Full Width) */}
+          {/* Left - Profile Card (Full Width on Mobile, 2 Cols on Desktop) */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -310,10 +328,80 @@ export default function ProfilePage() {
                 })}
               </div>
             </motion.div>
+          </div>
+        </div>
 
+        {/* Inventory Section (New) */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="mt-6 bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 p-6 lg:p-8"
+        >
+           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <h3 className="text-2xl font-black text-gray-900 flex items-center gap-3">
+                <Backpack className="text-orange-500" size={28} />
+                My Inventory
+              </h3>
+              <p className="text-gray-600 text-sm mt-1">Equip items to customize your profile appearance.</p>
+            </div>
+            
+            <Link href="/store" className="bg-gray-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-gray-800 transition-all flex items-center gap-2">
+              <Coins size={16} className="text-yellow-400"/>
+              Go to Store
+            </Link>
           </div>
 
-        </div>
+          {myItems === undefined ? (
+            <div className="text-center py-12"><Loader2 className="animate-spin mx-auto text-orange-500"/></div>
+          ) : myItems.length === 0 ? (
+            <div className="text-center py-12 bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-200">
+              <p className="text-gray-400 font-semibold mb-2">Your inventory is empty.</p>
+              <Link href="/store" className="text-orange-600 font-bold hover:underline">Buy your first item!</Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {myItems.map((item) => (
+                <div 
+                  key={item._id} 
+                  className={`p-4 rounded-2xl border-2 transition-all relative ${
+                    item.equipped 
+                    ? "border-orange-500 bg-orange-50 shadow-md" 
+                    : "border-gray-100 bg-white hover:border-orange-200 hover:shadow-sm"
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                     <span className="text-[10px] font-black uppercase text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full tracking-wider">
+                       {item.details?.type}
+                     </span>
+                     {item.equipped && (
+                       <span className="flex items-center gap-1 bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">
+                         <Zap size={10} fill="currentColor" /> EQUIPPED
+                       </span>
+                     )}
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className="font-bold text-gray-900 line-clamp-1">{item.details?.name}</h4>
+                    <p className="text-xs text-gray-500 line-clamp-2 mt-1 min-h-[2.5em]">{item.details?.description}</p>
+                  </div>
+                  
+                  <button
+                    onClick={() => handleEquip(item._id)}
+                    className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2 ${
+                      item.equipped
+                        ? "bg-white text-orange-600 border border-orange-200 hover:bg-orange-50"
+                        : "bg-gray-900 text-white hover:bg-gray-800 shadow-lg hover:shadow-xl active:scale-95"
+                    }`}
+                  >
+                    {item.equipped ? "Unequip" : "Equip"}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
 
         {/* Activity Feed Section - Desktop Only */}
         <motion.div

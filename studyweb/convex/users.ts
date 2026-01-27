@@ -134,8 +134,9 @@ export const generateUploadUrl = mutation(async (ctx) => {
 });
 
 export const getUserOverview = query({
-  args: { userId: v.string() },
+  args: { userId: v.optional(v.string()) },
   handler: async ({ db }, { userId }) => {
+    if(!userId) return null;
     
     const user = await db
       .query("users")
@@ -144,7 +145,6 @@ export const getUserOverview = query({
 
     if (!user) throw new Error("User not found");
 
-    
     const questions = await db
       .query("posts")
       .filter((q) => q.eq(q.field("userId"), user._id))
