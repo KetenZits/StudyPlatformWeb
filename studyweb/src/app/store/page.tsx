@@ -27,15 +27,16 @@ const StorePage = () => {
   const handleBuy = async (itemId: any, price: number) => {
     if (!currentUser) return;
     if (currentUser.coins < price) {
-      alert("เงินไม่พอจ้า! ไปตอบคำถามก่อนนะ 💸");
+      alert("No enough of Money, Go to Answer Question! 💸");
       return;
     }
     try {
       await buyItem({ itemId });
+      Response.json("Buy Item Scuccess!")
       // อาจจะใส่ Toast notification ตรงนี้
     } catch (error) {
       console.error(error);
-      alert("ซื้อไม่สำเร็จ เกิดข้อผิดพลาด");
+      alert("Purchase failed. Please try again.");
     }
   };
 

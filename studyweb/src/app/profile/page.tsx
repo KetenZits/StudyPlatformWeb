@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { Edit, Mail, Calendar, Award, Flame, TrendingUp, Coins, Shield, Ban, Loader2, User2, Trophy, Star, Target, Zap, Backpack } from "lucide-react";
+import { Edit, Mail, Calendar, Award, Flame, TrendingUp, Coins, Shield, Ban, Loader2, User2, Trophy, Star, Target, Zap, Backpack, Plus } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useQuery, useMutation } from "convex/react";
@@ -309,7 +309,10 @@ export default function ProfilePage() {
               transition={{ delay: 0.3 }}
               className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6"
             >
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Achievements</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-900 mb-4">Achievements</h3>
+                <Link href={'/achievements'} className="text-black hover:scale-115 transition-all"><Plus size={20} className="text-black"/></Link>
+              </div>
               <div className="grid grid-cols-2 gap-3">
                 {achievements.map((achievement, i) => {
                   const Icon = achievement.icon;

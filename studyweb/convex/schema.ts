@@ -24,8 +24,8 @@ export default defineSchema({
     banned: v.boolean(), 
 
     createdAt: v.number(),
-  }),
-
+  })
+  .index("by_clerkId", ["clerkId"]),
   // ================== CATEGORY ==================
   categories: defineTable({
     name: v.string(), 

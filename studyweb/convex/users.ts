@@ -182,3 +182,25 @@ export const getUserOverview = query({
     };
   },
 });
+
+export const getUserRole = query({
+  args: {},
+  handler: async (ctx) => {
+    // 1. ตรวจสอบสถานะการ Login (Identity)
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+    /*
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("tokenIdentifier"), identity.tokenIdentifier))
+      .first();
+    */
+    return user?.role; 
+  },
+});

@@ -136,6 +136,7 @@ export default function Index() {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  suppressHydrationWarning
                   className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-white hover:bg-gray-50 shadow-xl transition-all group cursor-pointer"
                 >
                   <span className="text-lg font-bold text-[#C9984E]">
@@ -159,6 +160,7 @@ export default function Index() {
                     transition={{ delay: 0.2 + i * 0.05 }}
                     whileHover={{ scale: 1.03, y: -4 }}
                     whileTap={{ scale: 0.97 }}
+                    suppressHydrationWarning
                     className="relative flex items-center gap-5 rounded-2xl bg-white/90 backdrop-blur-sm p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 group overflow-hidden"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${path.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
@@ -222,7 +224,7 @@ export default function Index() {
                           )}
                           <div>
                             <p className="font-bold text-gray-900 text-sm">{post.username ?? "Anonymous"}</p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-gray-500" suppressHydrationWarning>
                               {new Date(post.createdAt).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",

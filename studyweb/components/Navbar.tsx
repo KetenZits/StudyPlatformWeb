@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser, SignOutButton } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
+import { div } from "framer-motion/client";
 
 
 export default function Navbar() {
@@ -17,6 +18,7 @@ export default function Navbar() {
   const [activeTab, setActiveTab] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isSignedIn } = useUser();
+  const userRole = useQuery(api.users.getUserRole);
 
   const navItems = [
     { id: "home", label: "Home", icon: Home, link: "/", requireAuth: false },
@@ -41,6 +43,8 @@ export default function Navbar() {
     setMobileMenuOpen(false);
     router.push(item.link);
   };
+
+  console.log(userRole);
 
   return (
     <>
@@ -97,7 +101,19 @@ export default function Navbar() {
                 );
               })}
             
-              {/* Auth Buttons */}
+              
+                {/* --------------------- */}
+                {!userRole || userRole !== "Admin" ? (
+                  <div></div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <Link href="/admin/add-item" className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${"bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30" }`}>
+                      <span>Add Item</span>
+                    </Link>
+                  </div>
+                )}
+
+                {/* Auth Buttons */}
                 {!isSignedIn ? (
                   <>
                     <Link href="/sign-in" className="px-4 py-2 rounded-xl bg-gradient-to-br from-yellow-700 to-yellow-600 text-white">
@@ -125,6 +141,7 @@ export default function Navbar() {
                     </SignOutButton>
                   </div>
                 )}
+
             </div>
           </div>
         </div>

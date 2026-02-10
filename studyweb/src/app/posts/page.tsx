@@ -76,11 +76,6 @@ export default function PostsPage() {
       
       {/* Header Section */}
       <div className="max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-8">
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
           <div className="flex items-center gap-3 mb-4">
             <span className="text-5xl">📄</span>
             <div>
@@ -110,7 +105,6 @@ export default function PostsPage() {
                     <CirclePlus size={24}/>
                   </button>
                 </Link>
-        </motion.div>
       </div>
 
       {/* Posts Grid */}
