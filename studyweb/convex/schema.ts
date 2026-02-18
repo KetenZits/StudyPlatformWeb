@@ -21,15 +21,15 @@ export default defineSchema({
     lastBestAnswerDate: v.optional(v.string()),
 
     role: v.string(),
-    banned: v.boolean(), 
+    banned: v.boolean(),
 
     createdAt: v.number(),
-  })
-  .index("by_clerkId", ["clerkId"]),
+  }),
+
   // ================== CATEGORY ==================
   categories: defineTable({
-    name: v.string(), 
-    slug: v.string(), 
+    name: v.string(),
+    slug: v.string(),
     createdAt: v.number(),
   }),
 
@@ -40,8 +40,8 @@ export default defineSchema({
     body: v.string(),
     category: v.string(),
     bestAnswerId: v.optional(v.id("answers")),
-    reported: v.boolean(), 
-    hidden: v.boolean(),   
+    reported: v.boolean(),
+    hidden: v.boolean(),
     createdAt: v.number(),
     imageStorageId: v.optional(v.id("_storage")),
   }),
@@ -62,7 +62,8 @@ export default defineSchema({
     name: v.string(),
     description: v.string(),
     price: v.number(),
-    type: v.string(), 
+    type: v.string(),
+    imageStorageId: v.optional(v.id("_storage")),
     createdAt: v.number(),
   }),
 
@@ -70,17 +71,42 @@ export default defineSchema({
   userItems: defineTable({
     userId: v.id("users"),
     itemId: v.id("storeItems"),
-    equipped: v.boolean(), 
+    equipped: v.boolean(),
     createdAt: v.number(),
   }),
 
   // ================== REPORTS ==================
   reports: defineTable({
-    targetType: v.string(), 
+    targetType: v.string(),
     targetId: v.union(v.id("posts"), v.id("answers"), v.id("users")),
     reporterId: v.id("users"),
     reason: v.string(),
-    status: v.string(), 
+    status: v.string(),
+    createdAt: v.number(),
+  }),
+
+  // ================== ACHIEVEMENTS ==================
+  achievements: defineTable({
+    name: v.string(),
+    description: v.string(),
+    condition: v.string(),
+    imageStorageId: v.optional(v.id("_storage")),
+    createdAt: v.number(),
+  }),
+
+  // ================== USER ACHIEVEMENTS ==================
+  userAchievements: defineTable({
+    userId: v.id("users"),
+    achievementId: v.id("achievements"),
+    awardedAt: v.number(),
+  }),
+
+  // ================== ACTIVITIES ==================
+  activities: defineTable({
+    userId: v.id("users"),
+    type: v.string(),
+    message: v.string(),
+    relatedPostId: v.optional(v.id("posts")),
     createdAt: v.number(),
   }),
 });

@@ -1,8 +1,6 @@
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
-import { useUser } from "@clerk/clerk-react";
-
 
 
 export const createPost = mutation({
@@ -16,7 +14,6 @@ export const createPost = mutation({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
-    // ดึง user จาก table users
     const user = await ctx.db
       .query("users")
       .filter((q) => q.eq(q.field("email"), identity.email))
@@ -24,7 +21,7 @@ export const createPost = mutation({
 
     if (!user) throw new Error("User not found");
 
-    await ctx.db.insert("posts", {
+    const postId = await ctx.db.insert("posts", {
       userId: user._id,
       title: args.title,
       body: args.body,
@@ -35,6 +32,17 @@ export const createPost = mutation({
       createdAt: Date.now(),
       imageStorageId: args.imageStorageId,
     });
+
+    // --- LOG ACTIVITY ---
+    await ctx.db.insert("activities", {
+      userId: user._id,
+      type: "posted",
+      message: `Asked a question: "${args.title}"`,
+      relatedPostId: postId,
+      createdAt: Date.now(),
+    });
+
+    return postId;
   },
 });
 
@@ -43,16 +51,13 @@ export const getAllPosts = query(async ({ db, storage }) => {
 
   const postsWithDetails = await Promise.all(
     posts.map(async (post) => {
-      // ดึงข้อมูล user
       const user = await db.get(post.userId);
 
-      // ดึง URL ของรูป
       let imageUrl = null;
       if (post.imageStorageId) {
         imageUrl = await storage.getUrl(post.imageStorageId);
       }
 
-      // นับจำนวน answers
       const answers = await db
         .query("answers")
         .filter((q) => q.eq(q.field("postId"), post._id))
@@ -76,7 +81,7 @@ export const getAllPosts = query(async ({ db, storage }) => {
 export const getPostsRecent = query(async ({ db, storage }) => {
   const posts = await db
     .query("posts")
-    .order("desc") 
+    .order("desc")
     .collect();
 
   const postsWithImages = await Promise.all(
@@ -115,10 +120,8 @@ export const getPostById = query({
     const post = await db.get(postId);
     if (!post) return null;
 
-    // ดึง user (author)
     const author = await db.get(post.userId);
 
-    // ดึงภาพจาก storage ถ้ามี
     let imageUrl = null;
     if (post.imageStorageId) {
       imageUrl = await storage.getUrl(post.imageStorageId);

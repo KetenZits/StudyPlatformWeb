@@ -5,7 +5,6 @@ export const getUserByEmail = query(async ({ db, auth }) => {
   const identity = await auth.getUserIdentity();
   if (!identity) return null;
 
-  // ใช้ email (มีใน schema)
   return await db
     .query("users")
     .filter((q) => q.eq(q.field("email"), identity.email))
@@ -16,10 +15,35 @@ export const getCurrentUser = query(async ({ db, auth }) => {
   const identity = await auth.getUserIdentity();
   if (!identity) return null;
 
-  return await db
+  const user = await db
     .query("users")
     .filter(q => q.eq(q.field("clerkId"), identity.subject))
     .first();
+
+  if (!user) return null;
+
+  // ── Streak freshness check ──
+  // ถ้า lastAnswerDate ห่างจากวันนี้มากกว่า 1 วัน → streak ถือว่าขาดแล้ว
+  let isStreakActive = false;
+  if (user.lastAnswerDate) {
+    const now = new Date();
+    const lastAnswer = new Date(user.lastAnswerDate);
+    const getStartOfDay = (d: Date) => {
+      const copy = new Date(d);
+      copy.setHours(0, 0, 0, 0);
+      return copy.getTime();
+    };
+    const diffDays = Math.floor(
+      (getStartOfDay(now) - getStartOfDay(lastAnswer)) / (24 * 60 * 60 * 1000)
+    );
+    isStreakActive = diffDays <= 1;
+  }
+
+  return {
+    ...user,
+    isStreakActive,
+    displayStreak: isStreakActive ? user.answerStreak : 0,
+  };
 });
 
 export const getUserByClerkId = query(async ({ db, auth }) => {
@@ -63,7 +87,7 @@ export const createUser = mutation({
 
     return await ctx.db.insert("users", {
       ...args,
-      passwordHash: "", 
+      passwordHash: "",
     });
   },
 });
@@ -136,8 +160,8 @@ export const generateUploadUrl = mutation(async (ctx) => {
 export const getUserOverview = query({
   args: { userId: v.optional(v.string()) },
   handler: async ({ db }, { userId }) => {
-    if(!userId) return null;
-    
+    if (!userId) return null;
+
     const user = await db
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), userId))
@@ -151,14 +175,12 @@ export const getUserOverview = query({
       .collect();
     const questionsCount = questions.length;
 
-    
     const answers = await db
       .query("answers")
       .filter((q) => q.eq(q.field("userId"), user._id))
       .collect();
     const answersCount = answers.length;
 
-    
     const bestAnswers = await db
       .query("posts")
       .filter((q) => q.not(q.eq(q.field("bestAnswerId"), null)))
@@ -168,7 +190,6 @@ export const getUserOverview = query({
       (post) => post.bestAnswerId && answers.find((a) => a._id === post.bestAnswerId)
     ).length;
 
-    
     let helpfulVotes = 0;
     for (const ans of answers) {
       helpfulVotes += ans.likes ? ans.likes.length : 0;
@@ -186,21 +207,127 @@ export const getUserOverview = query({
 export const getUserRole = query({
   args: {},
   handler: async (ctx) => {
-    // 1. ตรวจสอบสถานะการ Login (Identity)
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       return null;
     }
+
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", identity.subject))
-      .unique();
-    /*
-    const user = await ctx.db
-      .query("users")
-      .filter((q) => q.eq(q.field("tokenIdentifier"), identity.tokenIdentifier))
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
-    */
-    return user?.role; 
+
+    return user?.role;
+  },
+});
+
+// ═══════════ PUBLIC PROFILE ═══════════
+
+export const getUserPublicProfile = query({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) return null;
+
+    // Compute stats
+    const questions = await ctx.db
+      .query("posts")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .collect();
+
+    const answers = await ctx.db
+      .query("answers")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .collect();
+
+    const bestAnswerPosts = await ctx.db
+      .query("posts")
+      .filter((q) => q.not(q.eq(q.field("bestAnswerId"), null)))
+      .collect();
+
+    const bestCount = bestAnswerPosts.filter(
+      (post) => post.bestAnswerId && answers.find((a) => a._id === post.bestAnswerId)
+    ).length;
+
+    let helpfulVotes = 0;
+    for (const ans of answers) {
+      helpfulVotes += ans.likes ? ans.likes.length : 0;
+    }
+
+    // Streak check
+    let isStreakActive = false;
+    if (user.lastAnswerDate) {
+      const now = new Date();
+      const lastAnswer = new Date(user.lastAnswerDate);
+      const getStartOfDay = (d: Date) => {
+        const copy = new Date(d);
+        copy.setHours(0, 0, 0, 0);
+        return copy.getTime();
+      };
+      const diffDays = Math.floor(
+        (getStartOfDay(now) - getStartOfDay(lastAnswer)) / (24 * 60 * 60 * 1000)
+      );
+      isStreakActive = diffDays <= 1;
+    }
+
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profilePic: user.profilePic,
+      bio: user.bio,
+      role: user.role,
+      banned: user.banned,
+      coins: user.coins,
+      answerStreak: user.answerStreak,
+      bestStreak: user.bestStreak,
+      isStreakActive,
+      displayStreak: isStreakActive ? user.answerStreak : 0,
+      createdAt: user.createdAt,
+      stats: {
+        questionsCount: questions.length,
+        answersCount: answers.length,
+        bestCount,
+        helpfulVotes,
+      },
+    };
+  },
+});
+
+// ═══════════ BAN / UNBAN ═══════════
+
+export const banUser = mutation({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const admin = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!admin || admin.role !== "Admin") throw new Error("Forbidden: Admin only");
+
+    await ctx.db.patch(userId, { banned: true });
+    return { success: true };
+  },
+});
+
+export const unbanUser = mutation({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const admin = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!admin || admin.role !== "Admin") throw new Error("Forbidden: Admin only");
+
+    await ctx.db.patch(userId, { banned: false });
+    return { success: true };
   },
 });

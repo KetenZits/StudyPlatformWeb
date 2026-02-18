@@ -6,17 +6,19 @@ import { api } from "../../../convex/_generated/api";
 import { ShoppingBag, Coins, Check } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import { useToast } from "../../../components/Toast";
 
 const StorePage = () => {
   const { user } = useUser();
-  
+  const toast = useToast();
+
   // Fetch ข้อมูล
   const currentUser = useQuery(api.users.getCurrentUser);
   const storeItems = useQuery(api.store.getStoreItems);
-  const myItems = useQuery(api.store.getUserItems, 
+  const myItems = useQuery(api.store.getUserItems,
     currentUser ? { userId: currentUser._id } : "skip"
   );
-  
+
   const buyItem = useMutation(api.store.buyItem);
 
   // เช็คว่าเรามีของชิ้นนี้หรือยัง
@@ -27,16 +29,15 @@ const StorePage = () => {
   const handleBuy = async (itemId: any, price: number) => {
     if (!currentUser) return;
     if (currentUser.coins < price) {
-      alert("No enough of Money, Go to Answer Question! 💸");
+      toast.warning("เงินไม่พอ 💸", "ไปตอบคำถามเพื่อรับ coins กันก่อนนะ!");
       return;
     }
     try {
       await buyItem({ itemId });
-      Response.json("Buy Item Scuccess!")
       // อาจจะใส่ Toast notification ตรงนี้
     } catch (error) {
       console.error(error);
-      alert("Purchase failed. Please try again.");
+      toast.error("ซื้อไม่สำเร็จ", "เกิดข้อผิดพลาด กรุณาลองใหม่");
     }
   };
 
@@ -44,7 +45,7 @@ const StorePage = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 pt-28 px-5 pb-10 mt-15">
-        
+
         {/* Header ส่วนแสดงเงิน */}
         <div className="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
@@ -71,15 +72,15 @@ const StorePage = () => {
         {/* Grid สินค้า */}
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {storeItems === undefined ? (
-             <p>Loading items...</p>
+            <p>Loading items...</p>
           ) : storeItems.length === 0 ? (
-             <p>No items available right now.</p>
+            <p>No items available right now.</p>
           ) : (
             storeItems.map((item) => {
               const owned = hasItem(item._id);
-              
+
               return (
-                <motion.div 
+                <motion.div
                   key={item._id}
                   whileHover={{ y: -5 }}
                   className="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 flex flex-col justify-between h-full relative overflow-hidden"
@@ -90,9 +91,12 @@ const StorePage = () => {
                   </span>
 
                   <div>
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 mb-4 flex items-center justify-center text-3xl">
-                       {/* ถ้ามีรูปใช้รูป ถ้าไม่มีใช้ icon ตาม type */}
-                       {item.type === 'badge' ? '🎖️' : item.type === 'color' ? '🎨' : '🎁'}
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-100 to-indigo-100 mb-4 flex items-center justify-center text-3xl overflow-hidden">
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                      ) : (
+                        item.type === 'badge' ? '🎖️' : item.type === 'frame' ? '🖼️' : item.type === 'theme' ? '🎨' : item.type === 'effect' ? '✨' : '📦'
+                      )}
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{item.name}</h3>
                     <p className="text-gray-500 text-sm mb-6">{item.description}</p>
@@ -107,11 +111,10 @@ const StorePage = () => {
                     <button
                       disabled={owned}
                       onClick={() => handleBuy(item._id, item.price)}
-                      className={`px-6 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${
-                        owned
-                          ? "bg-green-100 text-green-700 cursor-default"
-                          : "bg-black text-white hover:bg-gray-800 shadow-lg hover:shadow-xl active:scale-95"
-                      }`}
+                      className={`px-6 py-2 rounded-xl font-bold transition-all flex items-center gap-2 ${owned
+                        ? "bg-green-100 text-green-700 cursor-default"
+                        : "bg-black text-white hover:bg-gray-800 shadow-lg hover:shadow-xl active:scale-95"
+                        }`}
                     >
                       {owned ? (
                         <>

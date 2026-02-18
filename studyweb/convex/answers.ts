@@ -1,7 +1,6 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
-import { time } from "console";
 
 export const getAnswersByPostId = query({
   args: { postId: v.id("posts") },
@@ -11,14 +10,13 @@ export const getAnswersByPostId = query({
       .filter((q) => q.eq(q.field("postId"), postId))
       .collect();
 
-    // map ข้อมูล user และ upvotes (จำลอง)
     const populated = await Promise.all(
       answers.map(async (answer) => {
         const author = await db.get(answer.userId);
         return {
           ...answer,
           author,
-          upvotes: 0, // ยังไม่มีใน schema เลยใส่ default ไปก่อน
+          upvotes: 0,
         };
       })
     );
@@ -44,9 +42,8 @@ export const createAnswer = mutation({
 
     if (!user) throw new Error("User not found");
 
-    const now = new Date(); // เวลาปัจจุบันจริงๆ
-    
-    // บันทึก Answer ลง DB
+    const now = new Date();
+
     await db.insert("answers", {
       postId,
       userId: user._id,
@@ -56,10 +53,7 @@ export const createAnswer = mutation({
       createdAt: now.getTime(),
     });
 
-    // --- เริ่ม LOGIC STREAK ใหม่ ---
-    
-    // 1. สร้าง Helper function เพื่อหาวันที่แบบตัดเวลาออก (เที่ยงคืนของวันนั้น)
-    // ใช้ UTC เพื่อความชัวร์ หรือใช้ Local ตาม Server ก็ได้ แต่วิธีนี้จะไม่กระทบตัวแปร original
+    // --- STREAK LOGIC ---
     const getStartOfDay = (date: Date) => {
       const d = new Date(date);
       d.setHours(0, 0, 0, 0);
@@ -78,42 +72,46 @@ export const createAnswer = mutation({
       const diffDays = Math.floor(diffTime / ONE_DAY_MS);
 
       if (diffDays === 0) {
-        // ตอบภายในวันเดียวกัน -> Streak เท่าเดิม
         newStreak = user.answerStreak;
       } else if (diffDays === 1) {
-        // ตอบวันถัดมา (เมื่อวานตอบ วันนี้ตอบ) -> Streak + 1
         newStreak = user.answerStreak + 1;
       } else {
-        // ห่างไปมากกว่า 1 วัน (เช่น ตอบมะรืน) -> Streak ขาด เริ่มนับ 1 ใหม่
         newStreak = 1;
       }
     } else {
-      // ไม่เคยตอบมาก่อน เริ่มนับ 1
       newStreak = 1;
     }
 
-    // --- คำนวณเวลาที่เหลือจนกว่าจะหมดวัน (Optional) ---
-    // เป้าหมายคือบอกว่า "เหลือเวลาอีกกี่ชั่วโมงก่อนจะหมดวันนี้"
     const nextMidnight = new Date(now);
-    nextMidnight.setHours(24, 0, 0, 0); // เที่ยงคืนของวันพรุ่งนี้
+    nextMidnight.setHours(24, 0, 0, 0);
     const msLeft = nextMidnight.getTime() - now.getTime();
-    
+
     const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60));
     const minutesLeft = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-    // Update User
     await db.patch(user._id, {
       answerStreak: newStreak,
-      lastAnswerDate: now.toISOString(), // บันทึกเวลาปัจจุบันจริงๆ ไม่ใช่เที่ยงคืน
+      lastAnswerDate: now.toISOString(),
       bestStreak: Math.max(user.bestStreak || 0, newStreak),
+    });
+
+    // --- LOG ACTIVITY ---
+    const post = await db.get(postId);
+    const postTitle = post?.title ?? "a question";
+    await db.insert("activities", {
+      userId: user._id,
+      type: "answered",
+      message: `Answered a question: "${postTitle}"`,
+      relatedPostId: postId,
+      createdAt: Date.now(),
     });
 
     return {
       success: true,
       streak: newStreak,
-      timeLeft: { 
+      timeLeft: {
         hoursLeft,
-        minutesLeft 
+        minutesLeft
       },
     };
   },
@@ -125,18 +123,15 @@ export const markAsBestAnswer = mutation({
     answerId: v.id("answers"),
   },
   handler: async ({ db, auth }, { postId, answerId }) => {
-    // ตรวจสอบว่า user login
     const identity = await auth.getUserIdentity();
     if (!identity) throw new Error("Not authenticated");
 
-    // หาผู้ใช้
     const user = await db
       .query("users")
       .filter((q) => q.eq(q.field("email"), identity.email))
       .first();
     if (!user) throw new Error("User not found");
 
-    // ดึงโพสต์มาเพื่อตรวจสอบว่าเป็นเจ้าของไหม
     const post = await db.get(postId);
     if (!post) throw new Error("Post not found");
 
@@ -144,18 +139,34 @@ export const markAsBestAnswer = mutation({
       throw new Error("You are not the owner of this post");
     }
 
-    // อัปเดต post ให้มี bestAnswerId
     await db.patch(postId, {
       bestAnswerId: answerId,
     });
 
-    // (Optional) เพิ่มเหรียญให้คนที่ตอบได้ถูกเลือก
     const answer = await db.get(answerId);
     if (answer) {
       const answerOwner = await db.get(answer.userId);
       if (answerOwner) {
         await db.patch(answerOwner._id, {
-          coins: answerOwner.coins + 10, // สมมติ +10 เหรียญ
+          coins: answerOwner.coins + 10,
+        });
+
+        // --- LOG ACTIVITY for answer owner ---
+        await db.insert("activities", {
+          userId: answerOwner._id,
+          type: "best_answer",
+          message: `Got Best Answer on: "${post.title}"`,
+          relatedPostId: postId,
+          createdAt: Date.now(),
+        });
+
+        // --- LOG ACTIVITY for coin earning ---
+        await db.insert("activities", {
+          userId: answerOwner._id,
+          type: "earned_coins",
+          message: `Earned 10 coins for Best Answer`,
+          relatedPostId: postId,
+          createdAt: Date.now(),
         });
       }
     }
@@ -181,7 +192,6 @@ export const toggleLikeAnswer = mutation({
     const answer = await db.get(answerId);
     if (!answer) throw new Error("Answer not found");
 
-    // ดึง likes เดิม ถ้ายังไม่มีให้ set เป็น array ว่าง
     const likes = answer.likes || [];
 
     const hasLiked = likes.includes(user._id);
@@ -195,4 +205,3 @@ export const toggleLikeAnswer = mutation({
     return { success: true, liked: !hasLiked };
   },
 });
-
