@@ -4,7 +4,7 @@ import { ThumbsUp } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-export default function LikeButton({ answer, currentUser }) {
+export default function LikeButton({ answer, currentUser }: { answer: any, currentUser: any }) {
   const toggleLike = useMutation(api.answers.toggleLikeAnswer);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(answer.likes?.length || 0);
@@ -27,10 +27,10 @@ export default function LikeButton({ answer, currentUser }) {
       const res = await toggleLike({ answerId: answer._id });
       if (res.liked) {
         setLiked(true);
-        setLikeCount((c) => c + 1);
+        setLikeCount((c: number) => c + 1);
       } else {
         setLiked(false);
-        setLikeCount((c) => c - 1);
+        setLikeCount((c: number) => c - 1);
       }
     } catch (err) {
       console.error("Error liking answer:", err);

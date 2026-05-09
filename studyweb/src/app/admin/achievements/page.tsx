@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Trophy, Plus, Pencil, Trash2, UserPlus, X, Search, Award, Clock, ChevronDown, ChevronUp, ImagePlus } from "lucide-react";
@@ -138,8 +138,8 @@ export default function AchievementsAdminPage() {
 
     return (
         <>
-            <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-28 px-5 pb-10">
+            <Sidebar />
+            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-20 lg:pt-12 px-5 pb-10 lg:pl-[280px]">
                 <div className="max-w-6xl mx-auto">
 
                     {/* ── Header ── */}

@@ -7,11 +7,13 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Id } from "../../../../convex/_generated/dataModel";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import MarkAsBestButton from "../../../../components/MarkAsBestButton";
 import LikeButton from "../../../../components/LikeButton";
 import { useToast } from "../../../../components/Toast";
+import RichTextEditor from "../../../../components/RichTextEditor";
+import MarkdownRenderer from "../../../../components/MarkdownRenderer";
 
 export default function PostDetailPage() {
   const params = useParams();
@@ -84,14 +86,14 @@ export default function PostDetailPage() {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-15">
+      <Sidebar />
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 lg:pl-[280px]">
 
         {/* Decorative Background */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-300/20 to-amber-300/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-yellow-300/20 to-orange-300/20 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+        <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
 
           {/* Back Button */}
           <motion.div
@@ -146,9 +148,9 @@ export default function PostDetailPage() {
             </h1>
 
             {/* Post Body */}
-            <p className="text-gray-700 text-lg leading-relaxed mb-6 whitespace-pre-wrap">
-              {post.body}
-            </p>
+            <div className="bg-gray-50/50 rounded-2xl p-6 mb-6">
+              <MarkdownRenderer content={post.body} />
+            </div>
 
             {/* Post Image */}
             {post.imageUrl && (
@@ -182,13 +184,14 @@ export default function PostDetailPage() {
             >
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Answer</h2>
 
-              <textarea
-                value={answerText}
-                onChange={(e) => setAnswerText(e.target.value)}
-                placeholder="Share your knowledge and help others learn..."
-                rows={6}
-                className="w-full px-5 py-4 rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none transition-all text-gray-900 placeholder-gray-400 resize-none mb-4"
-              />
+              <div className="mb-4">
+                <RichTextEditor
+                  value={answerText}
+                  onChange={setAnswerText}
+                  placeholder="Share your knowledge and help others learn... (Markdown supported)"
+                  minHeight="150px"
+                />
+              </div>
 
               <div className="flex justify-end">
                 <motion.button
@@ -275,9 +278,9 @@ export default function PostDetailPage() {
                     </div>
 
                     {/* Answer Body */}
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                      {answer.body}
-                    </p>
+                    <div className="mt-4 bg-gray-50/50 rounded-xl p-4 text-gray-700 leading-relaxed">
+                      <MarkdownRenderer content={answer.body} />
+                    </div>
 
                     {/* Answer Actions */}
                     <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">

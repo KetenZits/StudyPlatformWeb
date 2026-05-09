@@ -4,7 +4,7 @@ import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
 
-export default function MarkAsBestButton({ post, answer, currentUser }) {
+export default function MarkAsBestButton({ post, answer, currentUser }: { post: any, answer: any, currentUser: any }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 

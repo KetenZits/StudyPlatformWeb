@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import Navbar from '../../../components/Navbar';
+import Sidebar from '../../../components/Sidebar';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { ShoppingBag, Coins, Check } from "lucide-react";
@@ -43,8 +43,8 @@ const StorePage = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 pt-28 px-5 pb-10 mt-15">
+      <Sidebar />
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
 
         {/* Header ส่วนแสดงเงิน */}
         <div className="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-4">

@@ -1,5 +1,5 @@
 "use client";
-import { Home, BookOpen, Store, User, Menu, X, MessageSquareText, Trophy, Search, ShoppingBag } from "lucide-react";
+import { Home, BookOpen, Store, User, Menu, X, Clock, Trophy, Search, Target, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -25,7 +25,9 @@ export default function Navbar() {
     { id: "home", label: "Home", icon: Home, link: "/", requireAuth: false },
     { id: "posts", label: "Posts", icon: BookOpen, link: "/posts", requireAuth: true },
     { id: "Top", label: "Top", icon: Trophy, link: "/leaderboard", requireAuth: false },
-    { id: "store", label: "Store", icon: Store, link: "/store", requireAuth: true },
+    { id: "store", label: "Store", icon: Store, link: "/store", requireAuth: false },
+    { id: "study-room", label: "Study Room", icon: Clock, link: "/study-room", requireAuth: false },
+    { id: "quests", label: "Quests", icon: Target, link: "/quests", requireAuth: true },
     { id: "profile", label: "Profile", icon: User, link: "/profile", requireAuth: true },
   ];
 
@@ -37,17 +39,17 @@ export default function Navbar() {
     else if (pathname.startsWith("/profile")) setActiveTab("profile");
   }, [pathname]);
 
-  const handleNavClick = (item) => {
+  const handleNavClick = (item: typeof navItems[number], e?: React.MouseEvent) => {
     if (item.requireAuth && !isSignedIn) {
+      e?.preventDefault();
       router.push("/sign-in");
       return;
     }
     setActiveTab(item.id);
     setMobileMenuOpen(false);
-    router.push(item.link);
   };
 
-  console.log(userRole);
+
 
   return (
     <>
@@ -78,19 +80,24 @@ export default function Navbar() {
                 const isActive = activeTab === item.id;
 
                 return (
-                  <motion.button
+                  <Link
                     key={item.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => handleNavClick(item)}
+                    href={item.link}
+                    onClick={(e) => handleNavClick(item, e)}
                     className={`relative flex items-center gap-3 px-6 py-3 rounded-xl transition-all ${isActive
                       ? "text-[#C9984E] font-bold"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                       }`}
                   >
-                    <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                    <span className="text-sm font-semibold">{item.label}</span>
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="flex items-center gap-3"
+                    >
+                      <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                      <span className="text-sm font-semibold">{item.label}</span>
+                    </motion.div>
 
                     {isActive && (
                       <motion.div
@@ -99,23 +106,25 @@ export default function Navbar() {
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
-                  </motion.button>
+                  </Link>
                 );
               })}
 
 
               {/* Admin Links */}
-              {!userRole || userRole !== "Admin" ? (
-                <div></div>
-              ) : (
+              {userRole === "admin" && (
                 <div className="flex items-center gap-2">
-                  <Link href="/admin/achievements" className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30`}>
-                    <Trophy size={18} />
-                    <span>Achievement</span>
+                  <Link href="/admin/achievements" className="flex items-center gap-2 px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 font-bold text-sm transition-colors">
+                    <Shield size={16} />
+                    <span>Achievements</span>
                   </Link>
-                  <Link href="/admin/store" className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-600 font-bold border-2 border-purple-300/40`}>
-                    <ShoppingBag size={18} />
+                  <Link href="/admin/store" className="flex items-center gap-2 px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 font-bold text-sm transition-colors">
+                    <Shield size={16} />
                     <span>Store</span>
+                  </Link>
+                  <Link href="/admin/quests" className="flex items-center gap-2 px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 font-bold text-sm transition-colors">
+                    <Shield size={16} />
+                    <span>Quests</span>
                   </Link>
                 </div>
               )}
@@ -171,9 +180,9 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
-              <span className="text-white font-black text-lg">S</span>
+              <span className="text-white font-black text-lg">N</span>
             </div>
-            <span className="text-lg font-black text-gray-900">Study</span>
+            <span className="text-lg font-black text-gray-900">NeuroSync</span>
           </div>
 
           {/* Hamburger */}
@@ -195,15 +204,25 @@ export default function Navbar() {
               className="overflow-hidden bg-white border-t border-gray-100"
             >
               <div className="px-5 py-4 space-y-2">
-                {userRole === "Admin" && (
+                {userRole === "admin" && (
                   <>
-                    <Link href="/admin/achievements" className="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-amber-50 to-orange-50 text-[#C9984E] font-bold border-2 border-[#C9984E]/30">
-                      <Trophy size={18} />
-                      <span>Achievement</span>
+                    <div className="px-3 mb-2 mt-4">
+                      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Admin</span>
+                    </div>
+                    <Link href="/admin/achievements">
+                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-bold transition-colors">
+                        <Shield size={18} /> Manage Achievements
+                      </button>
                     </Link>
-                    <Link href="/admin/store" className="w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-600 font-bold border-2 border-purple-300/40">
-                      <ShoppingBag size={18} />
-                      <span>Store Manager</span>
+                    <Link href="/admin/store">
+                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-bold transition-colors">
+                        <Shield size={18} /> Manage Store
+                      </button>
+                    </Link>
+                    <Link href="/admin/quests">
+                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 font-bold transition-colors">
+                        <Shield size={18} /> Manage Quests
+                      </button>
                     </Link>
                   </>
                 )}

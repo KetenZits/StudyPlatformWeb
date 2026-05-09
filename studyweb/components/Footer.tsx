@@ -80,10 +80,10 @@ const Footer = () => {
               {/* Logo */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center shadow-lg">
-                  <span className="text-white font-black text-xl">S</span>
+                  <span className="text-white font-black text-xl">N</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-black text-white">Study Platform</span>
+                  <span className="text-xl font-black text-white">NeuroSync</span>
                   <span className="text-xs text-gray-400">Learn & Share Knowledge</span>
                 </div>
               </div>
@@ -147,7 +147,7 @@ const Footer = () => {
             viewport={{ once: true }}
             className="text-sm text-gray-400"
           >
-            © {new Date().getFullYear()} Study Platform. Made with{" "}
+            © {new Date().getFullYear()} NeuroSync. Made with{" "}
             <Heart size={14} className="inline-block text-red-500 fill-current mx-1" />
             All rights reserved.
           </motion.div>

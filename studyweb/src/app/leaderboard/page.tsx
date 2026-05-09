@@ -8,7 +8,7 @@ import {
     Crown, Medal, Award, Loader2, ChevronRight
 } from "lucide-react";
 import Link from "next/link";
-import Navbar from "../../../components/Navbar";
+import Sidebar from "../../../components/Sidebar";
 import Footer from "../../../components/Footer";
 
 // ─── Categories matching create post ───
@@ -148,8 +148,8 @@ export default function LeaderboardPage() {
     if (data === undefined) {
         return (
             <>
-                <Navbar />
-                <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
+                <Sidebar />
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center lg:pl-[280px]">
                     <div className="text-center">
                         <Loader2 className="w-16 h-16 text-amber-600 animate-spin mx-auto mb-4" />
                         <h2 className="text-2xl font-bold text-gray-900">Loading Leaderboard...</h2>
@@ -165,13 +165,13 @@ export default function LeaderboardPage() {
 
     return (
         <>
-            <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-15">
+            <Sidebar />
+            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 lg:pl-[280px]">
                 {/* Decorative */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-yellow-300/20 to-amber-300/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-orange-300/20 to-yellow-300/20 rounded-full blur-3xl"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+                <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
                     {/* Header */}
                     <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-center mb-10">
                         <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-yellow-100 to-amber-100 border border-yellow-200 mb-4">

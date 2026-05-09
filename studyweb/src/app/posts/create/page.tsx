@@ -5,10 +5,12 @@ import React, { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../../../components/Toast";
+import RichTextEditor from "../../../../components/RichTextEditor";
+import MarkdownRenderer from "../../../../components/MarkdownRenderer";
 
 const categories = [
   { id: "math", label: "Mathematics", emoji: "📐", color: "from-blue-500 to-cyan-500" },
@@ -157,14 +159,14 @@ export default function CreatePostPage() {
 
   return (
     <>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-15">
+      <Sidebar />
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 lg:pl-[280px]">
 
         {/* Decorative Background */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-300/20 to-amber-300/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-yellow-300/20 to-orange-300/20 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+        <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
 
           {/* Header */}
           <motion.div
@@ -271,15 +273,10 @@ export default function CreatePostPage() {
                   <BookOpen size={20} className="text-orange-600" />
                   Question Details
                 </label>
-                <textarea
+                <RichTextEditor
                   value={formData.body}
-                  onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+                  onChange={(val) => setFormData({ ...formData, body: val })}
                   placeholder="Provide more context about your question. What have you tried? What specific help do you need?"
-                  rows={8}
-                  className={`w-full px-5 py-4 rounded-xl border-2 ${errors.body
-                      ? "border-red-300 focus:border-red-500"
-                      : "border-gray-200 focus:border-orange-500"
-                    } focus:outline-none transition-all text-gray-900 placeholder-gray-400 resize-none`}
                 />
                 {errors.body && (
                   <motion.div
@@ -461,7 +458,9 @@ export default function CreatePostPage() {
                   </div>
                 )}
                 {formData.body && (
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{formData.body}</p>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <MarkdownRenderer content={formData.body} />
+                  </div>
                 )}
                 {previewUrl && (
                   <div className="rounded-xl overflow-hidden border border-gray-200">

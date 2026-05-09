@@ -109,4 +109,37 @@ export default defineSchema({
     relatedPostId: v.optional(v.id("posts")),
     createdAt: v.number(),
   }),
+
+  // ================== STUDY SESSIONS ==================
+  studySessions: defineTable({
+    userId: v.id("users"),
+    startedAt: v.number(),
+    duration: v.number(),       // seconds studied
+    isActive: v.boolean(),
+    date: v.string(),           // "YYYY-MM-DD" for daily grouping
+    createdAt: v.number(),
+  }),
+
+  // ================== DAILY QUESTS ==================
+  dailyQuests: defineTable({
+    title: v.string(),
+    description: v.string(),
+    type: v.string(),          // "answer_questions", "login_streak", "get_best_answer", "study_time", "like_answers"
+    target: v.number(),        // e.g. answer 2 questions = target: 2
+    reward: v.number(),        // coins reward
+    emoji: v.string(),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+  }),
+
+  // ================== USER DAILY QUESTS ==================
+  userDailyQuests: defineTable({
+    userId: v.id("users"),
+    questId: v.id("dailyQuests"),
+    date: v.string(),          // "YYYY-MM-DD"
+    progress: v.number(),
+    completed: v.boolean(),
+    claimedReward: v.boolean(),
+    createdAt: v.number(),
+  }),
 });

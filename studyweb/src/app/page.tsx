@@ -2,17 +2,19 @@
 import { MessageCircle, ChevronRight, ArrowRight, Sparkles, TrendingUp, Award, Clock, Store } from "lucide-react";
 import { motion } from "framer-motion";
 import React from "react";
-import Navbar from "../../components/Navbar";
+import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import { api } from "../../convex/_generated/api";
 import { useQuery } from "convex/react";
 import Link from "next/link";
 import Marquee from "react-fast-marquee";
+import { Target } from "lucide-react";
 
 export default function Index() {
 
   const currentUser = useQuery(api.users.getCurrentUser);
-  const postsrecent = useQuery(api.posts.getPostsRecent)
+  const postsrecent = useQuery(api.posts.getPostsRecent);
+  const todayQuests = useQuery(api.dailyQuests.getTodayQuests);
 
   const timeLeft = React.useMemo(() => {
     if (!currentUser?.lastAnswerDate) return null;
@@ -32,10 +34,10 @@ export default function Index() {
   }, [currentUser?.lastAnswerDate]);
 
   const paths = [
-    { icon: TrendingUp, emoji: "🔥", title: "Hot Questions", subtitle: "Trending now", color: "from-orange-500 to-red-500" },
-    { icon: Clock, emoji: "🕒", title: "Recent", subtitle: "Latest posts", color: "from-blue-500 to-cyan-500" },
-    { icon: Award, emoji: "🏆", title: "Leaderboard", subtitle: "Top contributors", color: "from-purple-500 to-pink-500" },
-    { icon: Store, emoji: "🛒", title: "Store", subtitle: "Redeem rewards", color: "from-green-500 to-emerald-500" },
+    { icon: TrendingUp, emoji: "🔥", title: "Hot Questions", subtitle: "Trending now", color: "from-orange-500 to-red-500", link: "/posts" },
+    { icon: Clock, emoji: "🕒", title: "Recent", subtitle: "Latest posts", color: "from-blue-500 to-cyan-500", link: "/posts" },
+    { icon: Award, emoji: "🏆", title: "Leaderboard", subtitle: "Top contributors", color: "from-purple-500 to-pink-500", link: "/leaderboard" },
+    { icon: Store, emoji: "🛒", title: "Store", subtitle: "Redeem rewards", color: "from-green-500 to-emerald-500", link: "/store" },
   ];
 
   const stats = [
@@ -64,12 +66,12 @@ export default function Index() {
 
   
 
-  console.log(timeLeft);
+
 
   return (
     <>
-    <Navbar/>
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-20">
+    <Sidebar/>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-20 lg:pt-8 lg:pl-[280px]">
       
       {/* Main Container - Web Layout */}
       <div className="max-w-7xl mx-auto px-8 py-10">
@@ -152,32 +154,33 @@ export default function Index() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Access</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {paths.map((path, i) => (
-                  <motion.button
-                    key={i}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 + i * 0.05 }}
-                    whileHover={{ scale: 1.03, y: -4 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="relative flex items-center gap-5 rounded-2xl bg-white/90 backdrop-blur-sm p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 group overflow-hidden"
-                  >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${path.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
-                    
-                    <div className="text-5xl transform group-hover:scale-110 transition-transform">
-                      {path.emoji}
-                    </div>
-                    
-                    <div className="flex flex-col items-start flex-1">
-                      <span className="text-lg font-bold text-gray-900 mb-1">
-                        {path.title}
-                      </span>
-                      <span className="text-sm text-gray-500 font-medium">
-                        {path.subtitle}
-                      </span>
-                    </div>
-                    
-                    <ChevronRight className="text-gray-400 group-hover:text-[#C9984E] group-hover:translate-x-1 transition-all" size={24} />
-                  </motion.button>
+                  <Link key={i} href={path.link}>
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 + i * 0.05 }}
+                      whileHover={{ scale: 1.03, y: -4 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="relative flex items-center gap-5 rounded-2xl bg-white/90 backdrop-blur-sm p-6 shadow-lg hover:shadow-2xl transition-all border border-white/50 group overflow-hidden"
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-br ${path.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
+                      
+                      <div className="text-5xl transform group-hover:scale-110 transition-transform">
+                        {path.emoji}
+                      </div>
+                      
+                      <div className="flex flex-col items-start flex-1">
+                        <span className="text-lg font-bold text-gray-900 mb-1">
+                          {path.title}
+                        </span>
+                        <span className="text-sm text-gray-500 font-medium">
+                          {path.subtitle}
+                        </span>
+                      </div>
+                      
+                      <ChevronRight className="text-gray-400 group-hover:text-[#C9984E] group-hover:translate-x-1 transition-all" size={24} />
+                    </motion.div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -311,40 +314,112 @@ export default function Index() {
                 <span className="text-xl">📈</span>
               </h3>
 
-              <div className="space-y-6">
-                {stats.map((stat, i) => (
-                  <motion.div 
-                    key={i}
-                    whileHover={{ scale: 1.03 }}
-                    className="cursor-pointer"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="text-4xl">{stat.emoji}</div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-base font-semibold text-gray-700">
-                            {stat.label}
-                          </span>
-                          <span
-                            className={`text-2xl font-black ${
-                              stat.highlight 
-                                ? "bg-gradient-to-r from-[#D4A574] to-[#B8873D] bg-clip-text text-transparent" 
-                                : "text-gray-900"
-                            }`}
-                          >
-                            {stat.value}
-                          </span>
+              {!currentUser ? (
+                <div className="text-center py-6">
+                  <div className="text-5xl mb-4">🔐</div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Track Your Progress</h4>
+                  <p className="text-sm text-gray-500 mb-5">Sign in to see your streaks, coins, and achievements</p>
+                  <Link href="/sign-in">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#D4A574] to-[#B8873D] text-white font-bold shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                    >
+                      Sign In →
+                    </motion.button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {stats.map((stat, i) => (
+                    <motion.div 
+                      key={i}
+                      whileHover={{ scale: 1.03 }}
+                      className="cursor-pointer"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="text-4xl">{stat.emoji}</div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-base font-semibold text-gray-700">
+                              {stat.label}
+                            </span>
+                            <span
+                              className={`text-2xl font-black ${
+                                stat.highlight 
+                                  ? "bg-gradient-to-r from-[#D4A574] to-[#B8873D] bg-clip-text text-transparent" 
+                                  : "text-gray-900"
+                              }`}
+                            >
+                              {stat.value}
+                            </span>
+                          </div>
+                          <span className="text-sm text-gray-500">{stat.subtext}</span>
                         </div>
-                        <span className="text-sm text-gray-500">{stat.subtext}</span>
                       </div>
-                    </div>
-                    {i < stats.length - 1 && (
-                      <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mt-6" />
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+                      {i < stats.length - 1 && (
+                        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mt-6" />
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </motion.div>
+
+            {/* Daily Quests Widget */}
+            {currentUser && (
+              <motion.div
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="bg-white/90 backdrop-blur-sm rounded-2xl p-7 shadow-lg border border-white/50"
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    Daily Quests
+                    <span className="text-[#C9984E]"><Target size={20} /></span>
+                  </h3>
+                  <Link href="/quests">
+                    <button className="text-xs font-bold text-[#C9984E] hover:text-[#B8873D] bg-amber-50 px-2 py-1 rounded-lg transition-colors">
+                      View All
+                    </button>
+                  </Link>
+                </div>
+
+                <div className="space-y-4">
+                  {todayQuests === undefined ? (
+                    <div className="text-center text-gray-500 py-4 text-sm">Loading quests...</div>
+                  ) : todayQuests.length === 0 ? (
+                    <div className="text-center text-gray-500 py-4 text-sm">No quests today!</div>
+                  ) : (
+                    todayQuests.slice(0, 3).map((quest, i) => {
+                      const percent = Math.min((quest.progress / quest.target) * 100, 100);
+                      const isClaimed = quest.claimedReward;
+                      
+                      return (
+                        <div key={quest._id} className={`flex items-center gap-3 p-3 rounded-xl border ${isClaimed ? "bg-gray-50 border-gray-100 opacity-60" : "bg-white border-gray-200"}`}>
+                          <div className="text-2xl shrink-0">{quest.emoji}</div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-gray-900 truncate">{quest.title}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full ${isClaimed ? "bg-green-500" : "bg-[#C9984E]"}`} 
+                                  style={{ width: `${percent}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-[10px] font-bold text-gray-500 w-8 text-right">
+                                {quest.progress}/{quest.target}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </motion.div>
+            )}
 
           </div>
 

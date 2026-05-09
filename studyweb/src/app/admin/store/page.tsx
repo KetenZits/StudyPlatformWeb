@@ -5,7 +5,7 @@ import { api } from "../../../../convex/_generated/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Pencil, Trash2, X, ImagePlus, ShoppingBag, Coins, Package, ArrowLeft } from "lucide-react";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import Link from "next/link";
 import { useToast } from "../../../../components/Toast";
@@ -133,12 +133,12 @@ export default function AdminStorePage() {
 
     return (
         <>
-            <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 mt-15">
+            <Sidebar />
+            <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 lg:pl-[280px]">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-300/20 to-indigo-300/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-300/20 to-purple-300/20 rounded-full blur-3xl"></div>
 
-                <div className="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+                <div className="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
 
                     {/* Header */}
                     <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">

@@ -11,13 +11,13 @@ export const getUserByEmail = query(async ({ db, auth }) => {
     .first();
 });
 
-export const getCurrentUser = query(async ({ db, auth }) => {
-  const identity = await auth.getUserIdentity();
+export const getCurrentUserInternal = async (ctx: any) => {
+  const identity = await ctx.auth.getUserIdentity();
   if (!identity) return null;
 
-  const user = await db
+  const user = await ctx.db
     .query("users")
-    .filter(q => q.eq(q.field("clerkId"), identity.subject))
+    .filter((q: any) => q.eq(q.field("clerkId"), identity.subject))
     .first();
 
   if (!user) return null;
@@ -44,6 +44,10 @@ export const getCurrentUser = query(async ({ db, auth }) => {
     isStreakActive,
     displayStreak: isStreakActive ? user.answerStreak : 0,
   };
+};
+
+export const getCurrentUser = query(async (ctx) => {
+  return await getCurrentUserInternal(ctx);
 });
 
 export const getUserByClerkId = query(async ({ db, auth }) => {

@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import { Trophy, ArrowLeft, Loader2, Calendar, Award } from "lucide-react";
 import { motion } from "framer-motion";
@@ -27,8 +27,8 @@ export default function AchievementsPage() {
     if (!userId) {
         return (
             <>
-                <Navbar />
-                <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
+                <Sidebar />
+                <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center lg:pl-[280px]">
                     <div className="text-center">
                         <div className="text-6xl mb-4">⚠️</div>
                         <h2 className="text-2xl font-bold text-gray-900 mb-2">Missing User ID</h2>
@@ -41,8 +41,8 @@ export default function AchievementsPage() {
 
     return (
         <>
-            <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-28 px-5 pb-16">
+            <Sidebar />
+            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 pt-20 lg:pt-12 px-5 pb-16 lg:pl-[280px]">
                 <div className="max-w-5xl mx-auto">
 
                     {/* Back link */}
@@ -97,7 +97,7 @@ export default function AchievementsPage() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: i * 0.05 }}
-                                    whileHover={{ y: -4, shadow: "xl" }}
+                                    whileHover={{ y: -4 }}
                                     className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 p-6 hover:shadow-xl transition-all"
                                 >
                                     {/* Achievement Image */}

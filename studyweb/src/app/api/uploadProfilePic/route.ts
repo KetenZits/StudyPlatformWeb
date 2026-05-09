@@ -1,5 +1,6 @@
 import { ConvexHttpClient } from "convex/browser";
 import { NextResponse } from "next/server";
+import { api } from "../../../../convex/_generated/api";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
     }
 
     // ✅ ขอ upload URL จาก Convex
-    const uploadUrl = await convex.mutation("users:generateUploadUrl", {});
+    const uploadUrl = await convex.mutation(api.users.generateUploadUrl, {});
 
     // ✅ อัปโหลดไปที่ URL นั้น
     const res = await fetch(uploadUrl, {

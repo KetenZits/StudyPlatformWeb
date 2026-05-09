@@ -1,6 +1,7 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
+import { updateQuestProgressLogic } from "./dailyQuests";
 
 export const getAnswersByPostId = query({
   args: { postId: v.id("posts") },
@@ -106,6 +107,9 @@ export const createAnswer = mutation({
       createdAt: Date.now(),
     });
 
+    // --- UPDATE QUEST PROGRESS ---
+    await updateQuestProgressLogic(db, user._id, "answer_questions", 1);
+
     return {
       success: true,
       streak: newStreak,
@@ -168,6 +172,9 @@ export const markAsBestAnswer = mutation({
           relatedPostId: postId,
           createdAt: Date.now(),
         });
+
+        // --- UPDATE QUEST PROGRESS ---
+        await updateQuestProgressLogic(db, answerOwner._id, "get_best_answer", 1);
       }
     }
 

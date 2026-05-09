@@ -4,7 +4,8 @@ import { Save, X, User, FileText, Loader2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import Navbar from "../../../../components/Navbar";
+import { Id } from "../../../../convex/_generated/dataModel";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import ProfilePicEditor from "../../../../components/ProfilePicEditor";
 
@@ -63,14 +64,14 @@ export default function EditProfilePage() {
 
   return (
     <>
-    <Navbar/>
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-15">
+    <Sidebar/>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 lg:pl-[280px]">
       
       {/* Decorative Background */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-300/20 to-amber-300/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-yellow-300/20 to-orange-300/20 rounded-full blur-3xl"></div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+      <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
         
         {/* Header */}
         <motion.div
@@ -130,7 +131,7 @@ export default function EditProfilePage() {
             <div className="flex flex-col items-center gap-6">
               {/* Avatar Preview & Editor */}
                 <ProfilePicEditor
-                  currentImage={previewUrl}
+                  currentImage={previewUrl || undefined}
                   onImageSelect={(tempUrl) => {
                     setPreviewUrl(tempUrl);
                   }}
@@ -138,7 +139,7 @@ export default function EditProfilePage() {
                     // Update preview logic
                     setPreviewUrl(finalUrl);
                     // Update in Convex
-                    await updateProfilePic({ storageId });
+                    await updateProfilePic({ storageId: storageId as Id<"_storage"> });
                     setStatus({ type: "success", message: "Profile picture updated!" });
                   }}
                 />

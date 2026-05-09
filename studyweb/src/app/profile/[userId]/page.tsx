@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
 import Footer from "../../../../components/Footer";
 import Link from "next/link";
 import { useToast } from "../../../../components/Toast";
@@ -101,7 +101,7 @@ export default function PublicProfilePage() {
     if (profile === undefined) {
         return (
             <>
-                <Navbar />
+                <Sidebar />
                 <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
                     <div className="text-center">
                         <Loader2 className="w-16 h-16 text-orange-600 animate-spin mx-auto mb-4" />
@@ -115,7 +115,7 @@ export default function PublicProfilePage() {
     if (profile === null) {
         return (
             <>
-                <Navbar />
+                <Sidebar />
                 <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center">
                     <div className="text-center">
                         <div className="text-6xl mb-4">😕</div>
@@ -137,13 +137,13 @@ export default function PublicProfilePage() {
 
     return (
         <>
-            <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 mt-15">
+            <Sidebar />
+            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 lg:pl-[280px]">
                 {/* Decorative */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-300/20 to-amber-300/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-yellow-300/20 to-orange-300/20 rounded-full blur-3xl"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-24 md:pt-28 pb-16">
+                <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
 
                     {/* Back button */}
                     <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-6">
