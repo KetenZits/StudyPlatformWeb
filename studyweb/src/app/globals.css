@@ -1,44 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 :root {
+  --nm-bg: #e0e5ec;
+  --nm-bg-light: #e8ecf1;
+  --nm-shadow-light: #ffffff;
+  --nm-shadow-dark: #a3b1c6;
+  --nm-purple: #8b5cf6;
+  --nm-pink: #ec4899;
+  --nm-blue: #3b82f6;
+  --nm-navy: #1e40af;
+  --nm-indigo: #6366f1;
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'Inter', var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-  }
+body {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  background-color: #e0e5ec;
+  color: #2d3748;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+/* ═══════════════════════════════════════════════
+   Neumorphism Utility Classes
+   ═══════════════════════════════════════════════ */
+
+.nm-raised {
+  background: #e0e5ec;
+  border-radius: 20px;
+  box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
 }
-/* เลื่อน scrollbar ให้ดู modern ใสๆ */
+
+.nm-raised-sm {
+  background: #e0e5ec;
+  border-radius: 16px;
+  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+}
+
+.nm-raised-xs {
+  background: #e0e5ec;
+  border-radius: 12px;
+  box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+}
+
+.nm-inset {
+  background: #e0e5ec;
+  border-radius: 20px;
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+
+.nm-inset-sm {
+  background: #e0e5ec;
+  border-radius: 16px;
+  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+}
+
+.nm-inset-xs {
+  background: #e0e5ec;
+  border-radius: 12px;
+  box-shadow: inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff;
+}
+
+.nm-flat {
+  background: #e0e5ec;
+  border-radius: 16px;
+  box-shadow: 2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff;
+}
+
+.nm-btn {
+  background: #e0e5ec;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.nm-btn:hover {
+  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+}
+
+.nm-btn:active, .nm-btn-pressed {
+  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+}
+
+.nm-circle {
+  border-radius: 50%;
+  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+}
+
+.nm-circle-inset {
+  border-radius: 50%;
+  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+}
+
+.nm-gradient-btn {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6);
+  border-radius: 14px;
+  box-shadow: 4px 4px 10px #a3b1c6, -4px -4px 10px #ffffff;
+  color: white;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.nm-gradient-btn:hover {
+  box-shadow: 6px 6px 14px #a3b1c6, -6px -6px 14px #ffffff;
+  transform: translateY(-1px);
+}
+
+.nm-gradient-btn:active {
+  box-shadow: 2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff;
+  transform: translateY(0px);
+}
+
+.nm-gradient-pink {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+}
+
+.nm-input {
+  background: #e0e5ec;
+  border-radius: 12px;
+  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  color: #2d3748;
+  transition: all 0.2s ease;
+}
+
+.nm-input:focus {
+  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+}
+
+.nm-input::placeholder {
+  color: #94a3b8;
+}
+
+/* ═══════════════════════════════════════════════
+   Modern Scrollbar
+   ═══════════════════════════════════════════════ */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; /* พื้นหลังใส */
+  background: #e0e5ec;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2); /* สีขาวโปร่ง */
-  border-radius: 999px; /* กลมๆ modern */
-  border: 2px solid transparent; /* ทำให้ดูเหมือนลอย */
-  background-clip: padding-box;
+  background: #b0bec5;
+  border-radius: 999px;
+  border: 2px solid #e0e5ec;
   transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4); /* hover สว่างขึ้น */
+  background: #90a4ae;
 }
 
-/* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: #b0bec5 #e0e5ec;
+}
+
+/* ═══════════════════════════════════════════════
+   Progress bar neumorphic track
+   ═══════════════════════════════════════════════ */
+.nm-progress-track {
+  background: #e0e5ec;
+  border-radius: 999px;
+  box-shadow: inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff;
+}
+
+/* ═══════════════════════════════════════════════
+   Selection color
+   ═══════════════════════════════════════════════ */
+::selection {
+  background-color: rgba(139, 92, 246, 0.25);
+  color: #1e1b4b;
 }

@@ -47,9 +47,9 @@ const Footer = () => {
   const socialLinks = [
     { icon: Facebook, href: "#", label: "Facebook", color: "hover:text-blue-600" },
     { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-500" },
-    { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-600" },
+    { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-500" },
     { icon: Linkedin, href: "#", label: "LinkedIn", color: "hover:text-blue-700" },
-    { icon: Youtube, href: "#", label: "YouTube", color: "hover:text-red-600" },
+    { icon: Youtube, href: "#", label: "YouTube", color: "hover:text-red-500" },
   ];
 
   const contactInfo = [
@@ -59,10 +59,10 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 relative overflow-hidden">
+    <footer className="bg-[#d5dae3] relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-amber-700/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-900/5 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-purple-400/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/5 rounded-full blur-3xl"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-16">
         
@@ -79,16 +79,18 @@ const Footer = () => {
             >
               {/* Logo */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #b0b8c7, -4px -4px 8px #f0f4fa' }}
+                >
                   <span className="text-white font-black text-xl">N</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-black text-white">NeuroSync</span>
-                  <span className="text-xs text-gray-400">Learn & Share Knowledge</span>
+                  <span className="text-xl font-black text-gray-800">NeuroSync</span>
+                  <span className="text-xs text-gray-500">Learn & Share Knowledge</span>
                 </div>
               </div>
 
-              <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              <p className="text-gray-500 text-sm leading-relaxed mb-6">
                 Empowering learners worldwide with a collaborative platform for asking questions, sharing knowledge, and growing together.
               </p>
 
@@ -97,7 +99,7 @@ const Footer = () => {
                 {contactInfo.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="flex items-center gap-3 text-sm text-gray-400 hover:text-amber-600 transition-colors cursor-pointer">
+                    <div key={i} className="flex items-center gap-3 text-sm text-gray-500 hover:text-purple-600 transition-colors cursor-pointer">
                       <Icon size={16} />
                       <span>{item.text}</span>
                     </div>
@@ -117,13 +119,13 @@ const Footer = () => {
               transition={{ duration: 0.5, delay: sectionIndex * 0.1 }}
               className="lg:col-span-1"
             >
-              <h3 className="text-white font-bold text-base mb-4">{section.title}</h3>
+              <h3 className="text-gray-800 font-bold text-base mb-4">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, i) => (
                   <li key={i}>
                     <Link 
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-amber-600 transition-colors inline-block hover:translate-x-1 transform duration-200"
+                      className="text-sm text-gray-500 hover:text-purple-600 transition-colors inline-block hover:translate-x-1 transform duration-200"
                     >
                       {link.label}
                     </Link>
@@ -135,7 +137,7 @@ const Footer = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mb-8"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-400/30 to-transparent mb-8"></div>
 
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -145,10 +147,10 @@ const Footer = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-sm text-gray-400"
+            className="text-sm text-gray-500"
           >
             © {new Date().getFullYear()} NeuroSync. Made with{" "}
-            <Heart size={14} className="inline-block text-red-500 fill-current mx-1" />
+            <Heart size={14} className="inline-block text-red-400 fill-current mx-1" />
             All rights reserved.
           </motion.div>
 
@@ -166,7 +168,7 @@ const Footer = () => {
                   key={i}
                   href={social.href}
                   aria-label={social.label}
-                  className={`w-10 h-10 rounded-xl bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-all transform hover:scale-110 ${social.color}`}
+                  className={`w-10 h-10 rounded-xl nm-btn flex items-center justify-center transition-all transform hover:scale-110 text-gray-500 ${social.color}`}
                 >
                   <Icon size={18} />
                 </Link>
@@ -175,27 +177,27 @@ const Footer = () => {
           </motion.div>
         </div>
 
-        {/* Newsletter Section (Bonus) */}
+        {/* Newsletter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 pt-12 border-t border-gray-800"
+          className="mt-12 pt-12 border-t border-gray-400/20"
         >
           <div className="max-w-2xl mx-auto text-center">
-            <h3 className="text-2xl font-bold text-white mb-3">
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">
               Stay Updated 📬
             </h3>
-            <p className="text-gray-400 text-sm mb-6">
+            <p className="text-gray-500 text-sm mb-6">
               Subscribe to our newsletter for the latest updates, tips, and exclusive content.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-5 py-3 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:border-amber-600 transition-colors"
+                className="flex-1 nm-input"
               />
-              <button className="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-700 to-amber-900 text-white font-bold hover:shadow-xl hover:scale-105 transition-all">
+              <button className="px-8 py-3 rounded-xl nm-gradient-btn hover:scale-105 transition-all">
                 Subscribe
               </button>
             </div>

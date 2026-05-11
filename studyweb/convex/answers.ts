@@ -212,3 +212,59 @@ export const toggleLikeAnswer = mutation({
     return { success: true, liked: !hasLiked };
   },
 });
+
+// ═══════════ DELETE ANSWER ═══════════
+export const deleteAnswer = mutation({
+  args: { answerId: v.id("answers") },
+  handler: async ({ db, auth }, { answerId }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), identity.email))
+      .first();
+    if (!user) throw new Error("User not found");
+
+    const answer = await db.get(answerId);
+    if (!answer) throw new Error("Answer not found");
+
+    const isAdmin = user.role === "admin" || user.role === "Admin" || user.role === "developer" || user.role === "Developer";
+    if (answer.userId !== user._id && !isAdmin) throw new Error("Not authorized");
+
+    // If this was the best answer, remove that reference
+    const post = await db.get(answer.postId);
+    if (post && post.bestAnswerId === answerId) {
+      await db.patch(post._id, { bestAnswerId: undefined });
+    }
+
+    await db.delete(answerId);
+    return { success: true };
+  },
+});
+
+// ═══════════ UPDATE ANSWER ═══════════
+export const updateAnswer = mutation({
+  args: {
+    answerId: v.id("answers"),
+    body: v.string(),
+  },
+  handler: async ({ db, auth }, { answerId, body }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), identity.email))
+      .first();
+    if (!user) throw new Error("User not found");
+
+    const answer = await db.get(answerId);
+    if (!answer) throw new Error("Answer not found");
+
+    if (answer.userId !== user._id) throw new Error("Only the author can edit");
+
+    await db.patch(answerId, { body });
+    return { success: true };
+  },
+});

@@ -40,11 +40,15 @@ export default function LikeButton({ answer, currentUser }: { answer: any, curre
   return (
     <button
       onClick={handleLike}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold ${
+      className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all text-sm font-semibold ${
         liked
-          ? "bg-purple-100 text-purple-700"
-          : "bg-purple-50 hover:bg-purple-100 text-purple-600"
+          ? "text-purple-700"
+          : "text-purple-500 hover:text-purple-700"
       }`}
+      style={liked 
+        ? { boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff', background: '#e0e5ec' }
+        : { boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff', background: '#e0e5ec' }
+      }
     >
       <ThumbsUp size={16} fill={liked ? "currentColor" : "none"} />
       <span>{liked ? "Liked" : "Like"}</span>

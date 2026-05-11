@@ -311,7 +311,7 @@ export const banUser = mutation({
       .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
 
-    if (!admin || admin.role !== "Admin") throw new Error("Forbidden: Admin only");
+    if (!admin || (admin.role !== "admin" && admin.role !== "Admin" && admin.role !== "developer" && admin.role !== "Developer")) throw new Error("Forbidden: Admin or Developer only");
 
     await ctx.db.patch(userId, { banned: true });
     return { success: true };
@@ -329,9 +329,52 @@ export const unbanUser = mutation({
       .filter((q) => q.eq(q.field("clerkId"), identity.subject))
       .first();
 
-    if (!admin || admin.role !== "Admin") throw new Error("Forbidden: Admin only");
+    if (!admin || (admin.role !== "admin" && admin.role !== "Admin" && admin.role !== "developer" && admin.role !== "Developer")) throw new Error("Forbidden: Admin or Developer only");
 
     await ctx.db.patch(userId, { banned: false });
+    return { success: true };
+  },
+});
+
+// ═══════════ ADMIN: GET ALL USERS ═══════════
+export const getAllUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query("users").order("desc").collect();
+    return users.map((u) => ({
+      _id: u._id,
+      name: u.name,
+      email: u.email,
+      profilePic: u.profilePic,
+      role: u.role,
+      coins: u.coins,
+      answerStreak: u.answerStreak,
+      bestStreak: u.bestStreak,
+      banned: u.banned,
+      createdAt: u.createdAt,
+    }));
+  },
+});
+
+// ═══════════ ADMIN: UPDATE USER ROLE ═══════════
+export const updateUserRole = mutation({
+  args: {
+    userId: v.id("users"),
+    role: v.string(),
+  },
+  handler: async (ctx, { userId, role }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const admin = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("clerkId"), identity.subject))
+      .first();
+
+    if (!admin || (admin.role !== "admin" && admin.role !== "Admin" && admin.role !== "developer" && admin.role !== "Developer"))
+      throw new Error("Forbidden: Admin or Developer only");
+
+    await ctx.db.patch(userId, { role });
     return { success: true };
   },
 });

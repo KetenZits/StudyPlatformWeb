@@ -134,3 +134,74 @@ export const getPostById = query({
     };
   },
 });
+
+// ═══════════ DELETE POST ═══════════
+export const deletePost = mutation({
+  args: { postId: v.id("posts") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), identity.email))
+      .first();
+    if (!user) throw new Error("User not found");
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) throw new Error("Post not found");
+
+    const isAdmin = user.role === "admin" || user.role === "Admin" || user.role === "developer" || user.role === "Developer";
+    if (post.userId !== user._id && !isAdmin) throw new Error("Not authorized");
+
+    // Delete associated answers
+    const answers = await ctx.db
+      .query("answers")
+      .filter((q) => q.eq(q.field("postId"), args.postId))
+      .collect();
+    for (const answer of answers) {
+      await ctx.db.delete(answer._id);
+    }
+
+    // Delete post image from storage
+    if (post.imageStorageId) {
+      try { await ctx.storage.delete(post.imageStorageId); } catch (_e) { /* ignore */ }
+    }
+
+    await ctx.db.delete(args.postId);
+    return { success: true };
+  },
+});
+
+// ═══════════ UPDATE POST ═══════════
+export const updatePost = mutation({
+  args: {
+    postId: v.id("posts"),
+    title: v.string(),
+    body: v.string(),
+    category: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("email"), identity.email))
+      .first();
+    if (!user) throw new Error("User not found");
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) throw new Error("Post not found");
+
+    if (post.userId !== user._id) throw new Error("Only the author can edit this post");
+
+    await ctx.db.patch(args.postId, {
+      title: args.title,
+      body: args.body,
+      category: args.category,
+    });
+
+    return { success: true };
+  },
+});

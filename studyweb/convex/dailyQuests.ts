@@ -160,7 +160,7 @@ export const createQuest = mutation({
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserInternal(ctx);
-    if (!user || user.role !== "admin") throw new Error("Unauthorized");
+    if (!user || (user.role !== "admin" && user.role !== "Admin" && user.role !== "developer" && user.role !== "Developer")) throw new Error("Unauthorized");
 
     await ctx.db.insert("dailyQuests", {
       ...args,
@@ -174,7 +174,7 @@ export const toggleQuestActive = mutation({
   args: { questId: v.id("dailyQuests"), isActive: v.boolean() },
   handler: async (ctx, args) => {
     const user = await getCurrentUserInternal(ctx);
-    if (!user || user.role !== "admin") throw new Error("Unauthorized");
+    if (!user || (user.role !== "admin" && user.role !== "Admin" && user.role !== "developer" && user.role !== "Developer")) throw new Error("Unauthorized");
 
     await ctx.db.patch(args.questId, { isActive: args.isActive });
   },
@@ -184,7 +184,7 @@ export const deleteQuest = mutation({
   args: { questId: v.id("dailyQuests") },
   handler: async (ctx, args) => {
     const user = await getCurrentUserInternal(ctx);
-    if (!user || user.role !== "admin") throw new Error("Unauthorized");
+    if (!user || (user.role !== "admin" && user.role !== "Admin" && user.role !== "developer" && user.role !== "Developer")) throw new Error("Unauthorized");
 
     await ctx.db.delete(args.questId);
   },

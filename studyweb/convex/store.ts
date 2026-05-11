@@ -10,7 +10,7 @@ async function requireAdmin(ctx: any) {
     .query("users")
     .filter((q: any) => q.eq(q.field("clerkId"), identity.subject))
     .first();
-  if (!user || user.role !== "Admin") throw new ConvexError("Admin only");
+  if (!user || (user.role !== "admin" && user.role !== "Admin" && user.role !== "developer" && user.role !== "Developer")) throw new ConvexError("Admin or Developer only");
   return user;
 }
 

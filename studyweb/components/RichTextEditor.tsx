@@ -42,7 +42,6 @@ export default function RichTextEditor({
     
     onChange(newText);
     
-    // Focus and restore cursor position after render
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + before.length, start + before.length + selectedText.length);
@@ -50,7 +49,6 @@ export default function RichTextEditor({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Keyboard shortcuts
     if ((e.ctrlKey || e.metaKey)) {
       switch (e.key.toLowerCase()) {
         case 'b':
@@ -68,7 +66,6 @@ export default function RichTextEditor({
       }
     }
     
-    // Auto-indent on Enter in lists (basic)
     if (e.key === 'Enter') {
       const textarea = textareaRef.current;
       if (!textarea) return;
@@ -81,14 +78,12 @@ export default function RichTextEditor({
         e.preventDefault();
         const prefix = bulletMatch[1] + bulletMatch[2] + ' ';
         
-        // If line is just the bullet, remove it instead of adding a new one
         if (currentLine.trim() === bulletMatch[2]) {
           onChange(
             textarea.value.substring(0, start - currentLine.length) + 
             textarea.value.substring(start)
           );
         } else {
-          // If numbered list, increment number
           let nextPrefix = prefix;
           if (bulletMatch[2].match(/\d+\./)) {
             const num = parseInt(bulletMatch[2]);
@@ -124,15 +119,15 @@ export default function RichTextEditor({
   ];
 
   return (
-    <div className="flex flex-col border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-[#C9984E] transition-colors bg-white shadow-sm">
+    <div className="flex flex-col rounded-2xl overflow-hidden nm-raised transition-colors">
       {/* Toolbar & Tabs */}
-      <div className="flex flex-wrap items-center justify-between bg-gray-50 border-b border-gray-200 p-2 gap-2">
+      <div className="flex flex-wrap items-center justify-between p-2 gap-2 border-b border-gray-300/40">
         
         {/* Formatting Tools */}
         <div className="flex items-center gap-1 flex-wrap">
           {activeTab === "write" && tools.map((tool, i) => {
             if (tool.divider) {
-              return <div key={`div-${i}`} className="w-px h-6 bg-gray-300 mx-1" />;
+              return <div key={`div-${i}`} className="w-px h-6 bg-gray-300/50 mx-1" />;
             }
             const Icon = tool.icon;
             if (!Icon) return null;
@@ -142,7 +137,7 @@ export default function RichTextEditor({
                 type="button"
                 onClick={tool.action}
                 title={tool.label}
-                className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-2 text-gray-500 hover:text-purple-600 rounded-lg transition-colors hover:bg-white/30"
               >
                 <Icon size={18} />
               </button>
@@ -151,14 +146,14 @@ export default function RichTextEditor({
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex bg-gray-200/50 p-1 rounded-xl">
+        <div className="flex p-1 rounded-xl nm-inset-xs">
           <button
             type="button"
             onClick={() => setActiveTab("write")}
             className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${
               activeTab === "write" 
-                ? "bg-white text-[#B8873D] shadow-sm" 
-                : "text-gray-500 hover:text-gray-900"
+                ? "text-purple-600 nm-btn" 
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             <Edit3 size={16} /> Write
@@ -168,8 +163,8 @@ export default function RichTextEditor({
             onClick={() => setActiveTab("preview")}
             className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${
               activeTab === "preview" 
-                ? "bg-white text-[#B8873D] shadow-sm" 
-                : "text-gray-500 hover:text-gray-900"
+                ? "text-purple-600 nm-btn" 
+                : "text-gray-500 hover:text-gray-700"
             }`}
           >
             <Eye size={16} /> Preview
@@ -186,12 +181,12 @@ export default function RichTextEditor({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="w-full p-4 resize-none outline-none text-gray-800 leading-relaxed font-sans min-h-[200px]"
+            className="w-full p-4 resize-none outline-none text-gray-700 leading-relaxed font-sans min-h-[200px] bg-transparent"
             style={{ minHeight }}
           />
         ) : (
           <div 
-            className="w-full p-6 overflow-y-auto bg-gray-50/30"
+            className="w-full p-6 overflow-y-auto"
             style={{ minHeight }}
           >
             {value ? (
@@ -205,7 +200,7 @@ export default function RichTextEditor({
       
       {/* Footer Info */}
       {activeTab === "write" && (
-        <div className="px-4 py-2 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400 font-medium">
+        <div className="px-4 py-2 border-t border-gray-300/40 flex justify-between items-center text-xs text-gray-400 font-medium">
           <span>Markdown is supported</span>
           <span>{value.length} characters</span>
         </div>

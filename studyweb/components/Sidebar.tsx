@@ -65,18 +65,20 @@ export default function Sidebar() {
             key={item.id}
             href={item.link}
             onClick={(e) => handleNavClick(item, e)}
-            className={`relative flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all ${
+            className={`relative flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all ${
               isActive
-                ? "text-[#C9984E] font-bold bg-amber-50"
-                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-medium"
+                ? "nm-btn-pressed text-purple-600 font-bold"
+                : "text-gray-500 hover:text-gray-800 font-medium hover:bg-white/30"
             }`}
+            style={isActive ? { boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff' } : {}}
           >
             <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
             <span className="text-base">{item.label}</span>
             {isActive && !isMobile && (
               <motion.div
                 layoutId="activeIndicator"
-                className="absolute left-0 top-2 bottom-2 w-1.5 bg-[#C9984E] rounded-r-full"
+                className="absolute left-0 top-2 bottom-2 w-1.5 rounded-r-full"
+                style={{ background: 'linear-gradient(180deg, #8b5cf6, #3b82f6)' }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               />
             )}
@@ -84,20 +86,32 @@ export default function Sidebar() {
         );
       })}
 
-      {userRole === "admin" && (
-        <div className="mt-6 pt-6 border-t border-gray-100">
+      {(userRole === "admin" || userRole === "Admin" || userRole === "developer" || userRole === "Developer") && (
+        <div className="mt-6 pt-6 border-t border-gray-300/50">
           <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Admin Panel</p>
-          <Link href="/admin/achievements" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-semibold transition-colors">
+          <Link href="/admin/achievements" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
             <Shield size={20} />
             <span className="text-sm">Achievements</span>
           </Link>
-          <Link href="/admin/store" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-semibold transition-colors">
+          <Link href="/admin/store" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
             <Shield size={20} />
             <span className="text-sm">Store</span>
           </Link>
-          <Link href="/admin/quests" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-semibold transition-colors">
+          <Link href="/admin/quests" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
             <Shield size={20} />
             <span className="text-sm">Quests</span>
+          </Link>
+          <Link href="/admin/reports" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
+            <Shield size={20} />
+            <span className="text-sm">Reports</span>
+          </Link>
+          <Link href="/admin/users" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
+            <Shield size={20} />
+            <span className="text-sm">Users</span>
+          </Link>
+          <Link href="/admin/categories" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
+            <Shield size={20} />
+            <span className="text-sm">Categories</span>
           </Link>
         </div>
       )}
@@ -107,7 +121,9 @@ export default function Sidebar() {
   return (
     <>
       {/* 🟢 Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-[280px] bg-white/80 backdrop-blur-xl border-r border-gray-200 shadow-xl z-50">
+      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-[280px] bg-[#e0e5ec] z-50"
+        style={{ boxShadow: '6px 0 16px #a3b1c6, -2px 0 8px #ffffff' }}
+      >
         
         {/* Logo Area */}
         <div className="p-6">
@@ -116,11 +132,13 @@ export default function Sidebar() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-4"
           >
-            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center nm-circle"
+              style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)' }}
+            >
               <span className="text-white font-black text-xl">N</span>
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xl font-black text-gray-900 truncate">NeuroSync</span>
+              <span className="text-xl font-black text-gray-800 truncate">NeuroSync</span>
               <span className="text-xs text-gray-500 font-medium truncate">Study & Share</span>
             </div>
           </motion.div>
@@ -133,13 +151,13 @@ export default function Sidebar() {
           {isSignedIn && (
             <button
               onClick={() => setSearchOpen(true)}
-              className="w-full flex items-center justify-between px-4 py-3.5 mb-6 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-all border border-gray-200"
+              className="w-full flex items-center justify-between px-4 py-3.5 mb-6 rounded-xl nm-btn text-gray-500 hover:text-gray-800 transition-all"
             >
               <div className="flex items-center gap-3">
                 <Search size={20} />
                 <span className="font-medium text-sm">Search Users</span>
               </div>
-              <span className="text-xs font-semibold bg-white px-2 py-1 rounded-md border border-gray-200 shadow-sm">Ctrl K</span>
+              <span className="text-xs font-semibold px-2 py-1 rounded-md nm-inset-xs text-gray-500">Ctrl K</span>
             </button>
           )}
 
@@ -147,38 +165,38 @@ export default function Sidebar() {
         </div>
 
         {/* Bottom User Area */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50/50">
+        <div className="p-4 border-t border-gray-300/40">
           {!isSignedIn ? (
             <div className="flex flex-col gap-2">
-              <Link href="/sign-in" className="w-full text-center px-4 py-3 rounded-xl bg-gray-200 text-gray-800 font-bold hover:bg-gray-300 transition-colors">
+              <Link href="/sign-in" className="w-full text-center px-4 py-3 rounded-xl nm-btn text-gray-800 font-bold hover:text-purple-600 transition-colors">
                 Sign In
               </Link>
-              <Link href="/sign-up" className="w-full text-center px-4 py-3 rounded-xl bg-gradient-to-br from-amber-600 to-orange-600 text-white font-bold shadow-md hover:shadow-lg transition-all">
+              <Link href="/sign-up" className="w-full text-center px-4 py-3 rounded-xl nm-gradient-btn">
                 Sign Up
               </Link>
             </div>
           ) : (
-            <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-gray-200 shadow-sm">
+            <div className="flex items-center gap-3 p-2 rounded-2xl nm-raised-xs">
               <Link href="/profile" className="shrink-0">
                 {currentUser?.profilePic ? (
                   <img
                     src={currentUser.profilePic}
                     alt="avatar"
-                    className="w-10 h-10 rounded-xl object-cover border border-gray-200 hover:ring-2 hover:ring-[#C9984E] transition-all"
+                    className="w-10 h-10 rounded-xl object-cover hover:ring-2 hover:ring-purple-400 transition-all"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-xl bg-[#C9984E]/20 text-[#C9984E] flex items-center justify-center font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 text-white flex items-center justify-center font-bold">
                     {currentUser?.name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
               </Link>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-gray-900 truncate">{currentUser?.name || "Loading..."}</p>
+                <p className="text-sm font-bold text-gray-800 truncate">{currentUser?.name || "Loading..."}</p>
                 <p className="text-xs text-gray-500 truncate">{currentUser?.email || "Student"}</p>
               </div>
               <button 
                 onClick={handleSignOut}
-                className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50/50 rounded-xl transition-colors"
                 title="Sign Out"
               >
                 <LogOut size={18} />
@@ -189,27 +207,31 @@ export default function Sidebar() {
       </aside>
 
       {/* 🔴 Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-200 shadow-sm">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#e0e5ec]"
+        style={{ boxShadow: '0 4px 12px #a3b1c6' }}
+      >
         <div className="flex items-center justify-between h-16 px-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#D4A574] to-[#B8873D] flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}
+            >
               <span className="text-white font-black text-lg">N</span>
             </div>
-            <span className="text-lg font-black text-gray-900">NeuroSync</span>
+            <span className="text-lg font-black text-gray-800">NeuroSync</span>
           </div>
 
           <div className="flex items-center gap-2">
             {isSignedIn && (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors"
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-500 nm-btn transition-colors"
               >
-                <Search size={20} />
+              <Search size={20} />
               </button>
             )}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="w-10 h-10 rounded-xl bg-gray-100 text-gray-800 flex items-center justify-center transition-colors hover:bg-gray-200"
+              className="w-10 h-10 rounded-xl text-gray-700 flex items-center justify-center nm-btn transition-colors"
             >
               <Menu size={22} />
             </button>
@@ -226,21 +248,22 @@ export default function Sidebar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] lg:hidden"
             />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] bg-white z-[70] shadow-2xl flex flex-col lg:hidden"
+              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#e0e5ec] z-[70] flex flex-col lg:hidden"
+              style={{ boxShadow: '-8px 0 20px #a3b1c6' }}
             >
               {/* Drawer Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                <span className="font-bold text-gray-900">Menu</span>
+              <div className="flex items-center justify-between p-4 border-b border-gray-300/40">
+                <span className="font-bold text-gray-800">Menu</span>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-gray-600"
+                  className="w-10 h-10 rounded-xl nm-btn flex items-center justify-center text-gray-600"
                 >
                   <X size={20} />
                 </button>
@@ -252,20 +275,20 @@ export default function Sidebar() {
               </div>
 
               {/* Drawer Footer */}
-              <div className="p-4 border-t border-gray-100 bg-gray-50">
+              <div className="p-4 border-t border-gray-300/40">
                 {!isSignedIn ? (
                   <div className="flex gap-2">
-                    <Link href="/sign-in" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-gray-200 text-gray-800 font-bold">
+                    <Link href="/sign-in" className="flex-1 text-center px-4 py-2.5 rounded-xl nm-btn text-gray-800 font-bold">
                       Login
                     </Link>
-                    <Link href="/sign-up" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-gradient-to-br from-amber-600 to-orange-600 text-white font-bold">
+                    <Link href="/sign-up" className="flex-1 text-center px-4 py-2.5 rounded-xl nm-gradient-btn">
                       Sign Up
                     </Link>
                   </div>
                 ) : (
                   <button 
                     onClick={handleSignOut}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-red-100 text-red-600 font-bold hover:bg-red-200 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl nm-btn text-red-500 font-bold hover:text-red-600 transition-colors"
                   >
                     <LogOut size={20} />
                     <span>Sign Out</span>

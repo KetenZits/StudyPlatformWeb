@@ -36,45 +36,39 @@ export function useToast() {
 // ─────────── Config ───────────
 const TOAST_CONFIG: Record<ToastType, {
     icon: React.ReactNode;
-    gradient: string;
     iconBg: string;
-    border: string;
+    accentColor: string;
     progressColor: string;
 }> = {
     success: {
         icon: <CheckCircle2 size={22} className="text-white" />,
-        gradient: "from-green-50 to-emerald-50",
         iconBg: "bg-gradient-to-br from-green-500 to-emerald-600",
-        border: "border-green-200",
+        accentColor: "text-green-700",
         progressColor: "bg-green-500",
     },
     error: {
         icon: <XCircle size={22} className="text-white" />,
-        gradient: "from-red-50 to-rose-50",
         iconBg: "bg-gradient-to-br from-red-500 to-rose-600",
-        border: "border-red-200",
+        accentColor: "text-red-700",
         progressColor: "bg-red-500",
     },
     warning: {
         icon: <AlertTriangle size={22} className="text-white" />,
-        gradient: "from-amber-50 to-yellow-50",
         iconBg: "bg-gradient-to-br from-amber-500 to-yellow-600",
-        border: "border-amber-200",
+        accentColor: "text-amber-700",
         progressColor: "bg-amber-500",
     },
     info: {
         icon: <Info size={22} className="text-white" />,
-        gradient: "from-blue-50 to-cyan-50",
         iconBg: "bg-gradient-to-br from-blue-500 to-cyan-600",
-        border: "border-blue-200",
+        accentColor: "text-blue-700",
         progressColor: "bg-blue-500",
     },
     streak: {
         icon: <Flame size={22} className="text-white" />,
-        gradient: "from-orange-50 to-red-50",
-        iconBg: "bg-gradient-to-br from-orange-500 to-red-600",
-        border: "border-orange-200",
-        progressColor: "bg-gradient-to-r from-orange-500 to-red-500",
+        iconBg: "bg-gradient-to-br from-purple-500 to-pink-600",
+        accentColor: "text-purple-700",
+        progressColor: "bg-gradient-to-r from-purple-500 to-pink-500",
     },
 };
 
@@ -98,7 +92,8 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: 80, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className={`relative w-[380px] max-w-[90vw] bg-gradient-to-r ${config.gradient} rounded-2xl shadow-2xl border ${config.border} overflow-hidden backdrop-blur-sm`}
+            className="relative w-[380px] max-w-[90vw] bg-[#e0e5ec] rounded-2xl overflow-hidden"
+            style={{ boxShadow: '8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff' }}
         >
             <div className="flex items-start gap-3 p-4">
                 {/* Icon */}
@@ -108,9 +103,9 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
 
                 {/* Content */}
                 <div className="flex-1 min-w-0 pt-0.5">
-                    <p className="text-sm font-bold text-gray-900 leading-tight">{toast.title}</p>
+                    <p className="text-sm font-bold text-gray-800 leading-tight">{toast.title}</p>
                     {toast.message && (
-                        <p className="text-xs text-gray-600 mt-1 leading-relaxed">{toast.message}</p>
+                        <p className="text-xs text-gray-500 mt-1 leading-relaxed">{toast.message}</p>
                     )}
                 </div>
 
