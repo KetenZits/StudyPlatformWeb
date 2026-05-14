@@ -28,9 +28,9 @@ export default function EditProfilePage() {
     finally { setIsSubmitting(false); }
   };
 
-  if (!currentUser) return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Loading...</h2></div></div>);
+  if (!currentUser) return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Loading...</h2></div></div>);
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-3xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
         <div className="flex items-center justify-between mb-4">

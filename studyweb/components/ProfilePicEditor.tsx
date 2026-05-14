@@ -61,7 +61,7 @@ export default function ProfilePictureCrop({ currentImage, onSave, onCancel, onI
         <div className="space-y-4">
           {currentImage && (
             <div className="flex justify-center mb-4">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden" style={{ boxShadow: '6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff' }}>
+              <div className="relative w-32 h-32 rounded-full overflow-hidden" style={{ boxShadow: '6px 6px 12px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light)' }}>
                 <img src={currentImage} alt="Current profile" className="w-full h-full object-cover" />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function ProfilePictureCrop({ currentImage, onSave, onCancel, onI
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="relative w-full h-80 bg-gray-800 rounded-2xl overflow-hidden" style={{ boxShadow: '6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff' }}>
+          <div className="relative w-full h-80 bg-gray-800 rounded-2xl overflow-hidden" style={{ boxShadow: '6px 6px 12px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light)' }}>
             <Cropper image={imageSrc} crop={crop} zoom={zoom} aspect={1} cropShape="round" showGrid={false} onCropChange={setCrop} onZoomChange={setZoom} onCropComplete={onCropComplete} />
           </div>
           <div className="px-4 py-3 nm-inset-sm">

@@ -59,8 +59,8 @@ export default function SearchUsersModal({ isOpen, onClose }: SearchUsersModalPr
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                         className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-lg z-[101]"
                     >
-                        <div className="bg-[#e0e5ec] rounded-3xl overflow-hidden mx-4"
-                          style={{ boxShadow: '12px 12px 24px #a3b1c6, -12px -12px 24px #ffffff' }}
+                        <div className="bg-[var(--nm-bg)] rounded-3xl overflow-hidden mx-4"
+                          style={{ boxShadow: '12px 12px 24px var(--nm-shadow-dark), -12px -12px 24px var(--nm-shadow-light)' }}
                         >
 
                             {/* Search Input */}
@@ -120,7 +120,7 @@ export default function SearchUsersModal({ isOpen, onClose }: SearchUsersModalPr
                                                     className="flex items-center gap-4 px-6 py-3.5 hover:bg-white/30 transition-all cursor-pointer group"
                                                 >
                                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden shrink-0"
-                                                      style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}
+                                                      style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}
                                                     >
                                                         {user.profilePic ? (
                                                             <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />

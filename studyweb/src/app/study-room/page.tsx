@@ -84,7 +84,7 @@ export default function StudyRoomPage() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-12 pb-16 font-sans lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-12 pb-16 font-sans lg:pl-[280px]">
     <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8">
       <div className="text-center mb-10">
         <h1 className="text-4xl font-black text-gray-800 tracking-tight mb-3">Study Room <span className="text-purple-500">⚡</span></h1>
@@ -105,10 +105,10 @@ export default function StudyRoomPage() {
               : activeStudiers.map((studier, i) => (
                 <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} key={studier.userId} className="flex items-center gap-3 nm-flat p-3">
                   <div className="relative">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px #a3b1c6, -2px -2px 4px #ffffff' }}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px var(--nm-shadow-dark), -2px -2px 4px var(--nm-shadow-light)' }}>
                       {studier.profilePic ? <img src={studier.profilePic} alt={studier.name} className="w-full h-full object-cover" /> : <span className="text-white font-bold text-sm">{studier.name[0].toUpperCase()}</span>}
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-2 border-[#e0e5ec] rounded-full"></div>
+                    <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-2 border-[var(--nm-bg)] rounded-full"></div>
                   </div>
                   <div className="flex-1 min-w-0"><p className="text-sm font-bold text-gray-800 truncate">{studier.name}</p><p className="text-xs text-gray-500">Focusing right now</p></div>
                 </motion.div>
@@ -117,7 +117,7 @@ export default function StudyRoomPage() {
           </div>
 
           {isSignedIn && myStats && (
-            <div className="rounded-3xl p-6 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6)', boxShadow: '8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff' }}>
+            <div className="rounded-3xl p-6 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6)', boxShadow: '8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light)' }}>
               <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Today&apos;s Progress</h3>
               <div className="flex items-end gap-3 mb-2"><span className="text-4xl font-black text-white leading-none">{Math.floor(myStats.totalSeconds / 60)}</span><span className="text-purple-100 font-bold mb-1">mins studied</span></div>
               <div className="flex items-center gap-2 mt-4 text-sm text-purple-100"><Award size={16} /><span>{myStats.sessions} sessions completed</span></div>
@@ -129,7 +129,7 @@ export default function StudyRoomPage() {
         <div className="lg:col-span-1 flex flex-col items-center">
           <div className="flex items-center gap-2 p-1.5 rounded-2xl nm-raised mb-12">
             <button onClick={() => switchMode("work")} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === "work" ? "nm-gradient-btn" : "text-gray-500 hover:text-gray-800"}`}>Pomodoro</button>
-            <button onClick={() => switchMode("break")} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === "break" ? "text-white rounded-xl" : "text-gray-500 hover:text-gray-800"}`} style={mode === "break" ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' } : {}}>Short Break</button>
+            <button onClick={() => switchMode("break")} className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${mode === "break" ? "text-white rounded-xl" : "text-gray-500 hover:text-gray-800"}`} style={mode === "break" ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' } : {}}>Short Break</button>
           </div>
 
           <div className="relative flex items-center justify-center mb-12">
@@ -147,7 +147,7 @@ export default function StudyRoomPage() {
           <div className="flex items-center gap-4">
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleTimer}
               className="w-20 h-20 rounded-3xl flex items-center justify-center transition-colors"
-              style={state === "running" ? { background: '#e0e5ec', boxShadow: 'inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff', color: '#8b5cf6' } : { background: mode === "work" ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' : 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff', color: 'white' }}>
+              style={state === "running" ? { background: 'var(--nm-bg)', boxShadow: 'inset 4px 4px 8px var(--nm-shadow-dark), inset -4px -4px 8px var(--nm-shadow-light)', color: '#8b5cf6' } : { background: mode === "work" ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' : 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '6px 6px 12px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light)', color: 'white' }}>
               {state === "running" ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-2" />}
             </motion.button>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={resetTimer} className="w-14 h-14 rounded-2xl nm-btn flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors"><RefreshCw size={24} /></motion.button>
@@ -168,7 +168,7 @@ export default function StudyRoomPage() {
               : leaderboard.map((u, i) => (
                 <div key={u.userId} className={`flex items-center gap-3 p-3 rounded-2xl transition-all ${i < 3 ? "nm-flat" : "hover:bg-white/20"}`}>
                   <div className={`w-6 text-center font-black text-sm ${i === 0 ? "text-purple-500" : i === 1 ? "text-gray-500" : i === 2 ? "text-blue-500" : "text-gray-400"}`}>#{i + 1}</div>
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px #a3b1c6, -2px -2px 4px #ffffff' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px var(--nm-shadow-dark), -2px -2px 4px var(--nm-shadow-light)' }}>
                     {u.profilePic ? <img src={u.profilePic} alt={u.name} className="w-full h-full object-cover" /> : <span className="text-white font-bold text-sm">{u.name[0].toUpperCase()}</span>}
                   </div>
                   <div className="flex-1 min-w-0"><p className={`text-sm font-bold truncate ${i === 0 ? "text-purple-600" : "text-gray-800"}`}>{u.name}</p><p className="text-xs text-gray-500 font-medium">{formatDuration(u.totalSeconds)}</p></div>

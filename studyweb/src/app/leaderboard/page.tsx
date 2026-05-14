@@ -31,9 +31,9 @@ const GLOBAL_BOARDS = [
 type UserEntry = { _id: string; name: string; profilePic?: string; score: number; };
 
 function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #facc15, #f59e0b)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}><Crown size={20} className="text-white" /></div>;
-  if (rank === 2) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #9ca3af, #6b7280)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}><Medal size={20} className="text-white" /></div>;
-  if (rank === 3) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #d97706, #b45309)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}><Award size={20} className="text-white" /></div>;
+  if (rank === 1) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #facc15, #f59e0b)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}><Crown size={20} className="text-white" /></div>;
+  if (rank === 2) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #9ca3af, #6b7280)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}><Medal size={20} className="text-white" /></div>;
+  if (rank === 3) return <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #d97706, #b45309)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}><Award size={20} className="text-white" /></div>;
   return <div className="w-10 h-10 rounded-xl nm-inset-xs flex items-center justify-center"><span className="text-sm font-black text-gray-500">#{rank}</span></div>;
 }
 
@@ -50,7 +50,7 @@ function LeaderboardCard({ title, emoji, color, entries, unit, delay = 0 }: { ti
               <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: delay + i * 0.03 }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all mt-2 cursor-pointer group ${i < 3 ? "nm-flat" : "hover:bg-white/30"}`}>
                 <RankBadge rank={i + 1} />
-                <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px #a3b1c6, -2px -2px 4px #ffffff' }}>
+                <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 4px var(--nm-shadow-dark), -2px -2px 4px var(--nm-shadow-light)' }}>
                   {user.profilePic ? <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" /> : <span className="text-white font-bold text-xs">{user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}</span>}
                 </div>
                 <div className="flex-1 min-w-0"><p className="text-sm font-bold text-gray-800 truncate group-hover:text-purple-600 transition-colors">{user.name}</p></div>
@@ -71,12 +71,12 @@ export default function LeaderboardPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   if (data === undefined) {
-    return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center lg:pl-[280px]"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800">Loading Leaderboard...</h2></div></div></>);
+    return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center lg:pl-[280px]"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800">Loading Leaderboard...</h2></div></div></>);
   }
 
   const selectedCatData = selectedCategory ? data.byCategory.find((c) => c.id === selectedCategory) : null;
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="text-center mb-10">
         <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl nm-raised mb-4"><Trophy size={20} className="text-purple-500" /><span className="text-sm font-bold text-purple-600">Top Performers</span></div>
@@ -105,7 +105,7 @@ export default function LeaderboardPage() {
                 return (
                   <motion.button key={cat.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }} onClick={() => setSelectedCategory(isActive ? null : cat.id)}
                     className={`relative p-4 rounded-2xl font-bold text-sm transition-all text-left ${isActive ? `bg-gradient-to-r ${cat.color} text-white` : "nm-raised text-gray-600"}`}
-                    style={isActive ? { boxShadow: '4px 4px 10px #a3b1c6' } : {}}>
+                    style={isActive ? { boxShadow: '4px 4px 10px var(--nm-shadow-dark)' } : {}}>
                     <div className="flex items-center gap-2 mb-1"><span className="text-xl">{cat.emoji}</span><span>{cat.label}</span></div>
                     <span className={`text-xs ${isActive ? "text-white/80" : "text-gray-400"}`}>{count} participants</span>
                   </motion.button>

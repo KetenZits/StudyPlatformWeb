@@ -17,12 +17,12 @@ export default function AdminQuestsPage() {
 
   const handleCreate = async (e: React.FormEvent) => { e.preventDefault(); await createQuest(formData); setIsAdding(false); setFormData({ title: "", description: "", type: "answer_questions", target: 1, reward: 10, emoji: "📝" }); };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-12 pb-10 lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-12 pb-10 lg:pl-[280px]">
     <div className="max-w-6xl mx-auto px-5 md:px-8">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-black text-gray-800 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><Target size={24} className="text-white" /></div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><Target size={24} className="text-white" /></div>
             Quest Manager
           </h1>
           <p className="text-gray-500 mt-1 ml-15">Create and manage daily quests</p>
@@ -72,7 +72,7 @@ export default function AdminQuestsPage() {
                   <td className="p-4 text-center">
                     <button onClick={() => toggleQuest({ questId: quest._id, isActive: !quest.isActive })}
                       className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${quest.isActive ? "text-white" : "nm-inset-xs text-red-600"}`}
-                      style={quest.isActive ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '2px 2px 4px #a3b1c6, -2px -2px 4px #ffffff' } : {}}>
+                      style={quest.isActive ? { background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '2px 2px 4px var(--nm-shadow-dark), -2px -2px 4px var(--nm-shadow-light)' } : {}}>
                       {quest.isActive ? "Active" : "Disabled"}
                     </button>
                   </td>

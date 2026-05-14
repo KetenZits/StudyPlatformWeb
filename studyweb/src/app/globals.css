@@ -6,11 +6,37 @@
   --nm-bg-light: #e8ecf1;
   --nm-shadow-light: #ffffff;
   --nm-shadow-dark: #a3b1c6;
+  --text-main: #2d3748;
+  --text-muted: #64748b;
+  --border-color: rgba(209, 213, 219, 0.4);
+  
   --nm-purple: #8b5cf6;
   --nm-pink: #ec4899;
   --nm-blue: #3b82f6;
   --nm-navy: #1e40af;
   --nm-indigo: #6366f1;
+}
+
+.dark {
+  --nm-bg: #1e293b;
+  --nm-bg-light: #334155;
+  --nm-shadow-light: #334155;
+  --nm-shadow-dark: #0f172a;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border-color: rgba(51, 65, 85, 0.4);
+
+  /* Invert gray scale for dark mode so text-gray-* classes become light */
+  --color-gray-900: #f8fafc;
+  --color-gray-800: #f1f5f9;
+  --color-gray-700: #e2e8f0;
+  --color-gray-600: #cbd5e1;
+  --color-gray-500: #94a3b8;
+  --color-gray-400: #64748b;
+  --color-gray-300: #475569;
+  --color-gray-200: #334155;
+  --color-gray-100: #1e293b;
+  --color-gray-50: #0f172a;
 }
 
 @theme inline {
@@ -20,8 +46,9 @@
 
 body {
   font-family: 'Inter', Arial, Helvetica, sans-serif;
-  background-color: #e0e5ec;
-  color: #2d3748;
+  background-color: var(--nm-bg);
+  color: var(--text-main);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* ═══════════════════════════════════════════════
@@ -29,89 +56,89 @@ body {
    ═══════════════════════════════════════════════ */
 
 .nm-raised {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 20px;
-  box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+  box-shadow: 8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light);
 }
 
 .nm-raised-sm {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 16px;
-  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+  box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light);
 }
 
 .nm-raised-xs {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 12px;
-  box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+  box-shadow: 3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light);
 }
 
 .nm-inset {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 20px;
-  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+  box-shadow: inset 4px 4px 8px var(--nm-shadow-dark), inset -4px -4px 8px var(--nm-shadow-light);
 }
 
 .nm-inset-sm {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 16px;
-  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light);
 }
 
 .nm-inset-xs {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 12px;
-  box-shadow: inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff;
+  box-shadow: inset 2px 2px 4px var(--nm-shadow-dark), inset -2px -2px 4px var(--nm-shadow-light);
 }
 
 .nm-flat {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 16px;
-  box-shadow: 2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff;
+  box-shadow: 2px 2px 5px var(--nm-shadow-dark), -2px -2px 5px var(--nm-shadow-light);
 }
 
 .nm-btn {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 12px;
-  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+  box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light);
   transition: all 0.15s ease;
   cursor: pointer;
 }
 
 .nm-btn:hover {
-  box-shadow: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
+  box-shadow: 6px 6px 12px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light);
 }
 
 .nm-btn:active, .nm-btn-pressed {
-  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light);
 }
 
 .nm-circle {
   border-radius: 50%;
-  box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+  box-shadow: 5px 5px 10px var(--nm-shadow-dark), -5px -5px 10px var(--nm-shadow-light);
 }
 
 .nm-circle-inset {
   border-radius: 50%;
-  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light);
 }
 
 .nm-gradient-btn {
   background: linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6);
   border-radius: 14px;
-  box-shadow: 4px 4px 10px #a3b1c6, -4px -4px 10px #ffffff;
+  box-shadow: 4px 4px 10px var(--nm-shadow-dark), -4px -4px 10px var(--nm-shadow-light);
   color: white;
   font-weight: 700;
   transition: all 0.2s ease;
 }
 
 .nm-gradient-btn:hover {
-  box-shadow: 6px 6px 14px #a3b1c6, -6px -6px 14px #ffffff;
+  box-shadow: 6px 6px 14px var(--nm-shadow-dark), -6px -6px 14px var(--nm-shadow-light);
   transform: translateY(-1px);
 }
 
 .nm-gradient-btn:active {
-  box-shadow: 2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff;
+  box-shadow: 2px 2px 5px var(--nm-shadow-dark), -2px -2px 5px var(--nm-shadow-light);
   transform: translateY(0px);
 }
 
@@ -120,22 +147,22 @@ body {
 }
 
 .nm-input {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 12px;
-  box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light);
   border: none;
   outline: none;
   padding: 12px 16px;
-  color: #2d3748;
+  color: var(--text-main);
   transition: all 0.2s ease;
 }
 
 .nm-input:focus {
-  box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
+  box-shadow: inset 4px 4px 8px var(--nm-shadow-dark), inset -4px -4px 8px var(--nm-shadow-light);
 }
 
 .nm-input::placeholder {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* ═══════════════════════════════════════════════
@@ -146,13 +173,13 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #e0e5ec;
+  background: var(--nm-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #b0bec5;
+  background: var(--border-color);
   border-radius: 999px;
-  border: 2px solid #e0e5ec;
+  border: 2px solid var(--nm-bg);
   transition: background 0.3s ease;
 }
 
@@ -162,16 +189,16 @@ body {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #b0bec5 #e0e5ec;
+  scrollbar-color: var(--border-color) var(--nm-bg);
 }
 
 /* ═══════════════════════════════════════════════
    Progress bar neumorphic track
    ═══════════════════════════════════════════════ */
 .nm-progress-track {
-  background: #e0e5ec;
+  background: var(--nm-bg);
   border-radius: 999px;
-  box-shadow: inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff;
+  box-shadow: inset 2px 2px 4px var(--nm-shadow-dark), inset -2px -2px 4px var(--nm-shadow-light);
 }
 
 /* ═══════════════════════════════════════════════

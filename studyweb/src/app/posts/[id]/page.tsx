@@ -15,6 +15,7 @@ import ReportButton from "../../../../components/ReportButton";
 import { useToast } from "../../../../components/Toast";
 import RichTextEditor from "../../../../components/RichTextEditor";
 import MarkdownRenderer from "../../../../components/MarkdownRenderer";
+import AnswerComments from "../../../../components/AnswerComments";
 
 export default function PostDetailPage() {
   const params = useParams();
@@ -99,13 +100,13 @@ export default function PostDetailPage() {
   const getInitials = (name: string) => name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || "U";
 
   if (post === undefined || answers === undefined) {
-    return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800">Loading...</h2></div></div>);
+    return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800">Loading...</h2></div></div>);
   }
   if (!post) {
-    return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><h2 className="text-2xl font-bold text-gray-800 mb-4">Post not found</h2><Link href="/posts"><button className="px-6 py-3 rounded-xl nm-gradient-btn">Back to Posts</button></Link></div></div>);
+    return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><h2 className="text-2xl font-bold text-gray-800 mb-4">Post not found</h2><Link href="/posts"><button className="px-6 py-3 rounded-xl nm-gradient-btn">Back to Posts</button></Link></div></div>);
   }
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-5xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="mb-6">
         <Link href="/posts"><button className="flex items-center gap-2 px-4 py-2 rounded-xl nm-btn text-gray-600 font-semibold transition-all"><ArrowLeft size={18} /><span>Back to Posts</span></button></Link>
@@ -115,7 +116,7 @@ export default function PostDetailPage() {
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="nm-raised p-6 sm:p-8 mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
           <Link href={`/profile/${post.userId}`} className="flex items-center gap-4 group/author">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>
               {post.author?.profilePic ? <img src={post.author.profilePic} alt={post.author.name} className="w-full h-full object-cover" /> : <span className="text-white font-black text-xl">{getInitials(post.author?.name || "User")}</span>}
             </div>
             <div><h3 className="text-lg font-bold text-gray-800 group-hover/author:text-purple-600 transition-colors">{post.author?.name || "Anonymous"}</h3><div className="flex items-center gap-2 text-sm text-gray-500 mt-1"><Calendar size={14} /><span>{new Date(post.createdAt).toLocaleDateString()}</span></div></div>
@@ -142,7 +143,7 @@ export default function PostDetailPage() {
           </>
         )}
 
-        {post.imageUrl && <div className="mb-6"><img src={post.imageUrl} alt="Post" className="w-full rounded-2xl max-h-96 object-contain" style={{ boxShadow: '6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff' }} /></div>}
+        {post.imageUrl && <div className="mb-6"><img src={post.imageUrl} alt="Post" className="w-full rounded-2xl max-h-96 object-contain" style={{ boxShadow: '6px 6px 12px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light)' }} /></div>}
 
         <div className="flex items-center gap-3 pt-6 border-t border-gray-300/40 flex-wrap">
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl nm-inset-xs"><MessageSquareText size={18} className="text-blue-500" /><span className="text-sm font-bold text-blue-600">{answers?.length || 0} Answers</span></div>
@@ -195,7 +196,7 @@ export default function PostDetailPage() {
               {answer._id === post.bestAnswerId && <div className="flex items-center gap-2 mb-4 text-green-600"><Award size={20} /><span className="font-bold text-sm">Best Answer</span></div>}
               <div className="flex items-start justify-between mb-4">
                 <Link href={`/profile/${answer.userId}`} className="flex items-center gap-3 group/author">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0" style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
                     {answer.author?.profilePic ? <img src={answer.author.profilePic} alt={answer.author.name} className="w-full h-full object-cover" /> : <span className="text-white font-bold text-sm">{getInitials(answer.author?.name || "User")}</span>}
                   </div>
                   <div><h4 className="font-bold text-gray-800 group-hover/author:text-purple-600 transition-colors">{answer.author?.name || "Anonymous"}</h4><p className="text-xs text-gray-500">{new Date(answer.createdAt).toLocaleDateString()}</p></div>
@@ -228,6 +229,9 @@ export default function PostDetailPage() {
                 )}
                 {currentUser && !isAnswerOwner && <ReportButton targetType="answer" targetId={answer._id} />}
               </div>
+
+              {/* Answer Comments */}
+              <AnswerComments answerId={answer._id} currentUser={currentUser} />
 
               {/* Delete Confirm */}
               <AnimatePresence>{isDeleting && (

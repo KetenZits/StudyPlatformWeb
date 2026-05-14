@@ -107,6 +107,19 @@ export const createAnswer = mutation({
       createdAt: Date.now(),
     });
 
+    // --- SEND NOTIFICATION to post owner ---
+    if (post && post.userId !== user._id) {
+      await db.insert("notifications", {
+        userId: post.userId,
+        fromUserId: user._id,
+        type: "new_answer",
+        message: `answered your question "${postTitle}"`,
+        relatedPostId: postId,
+        read: false,
+        createdAt: Date.now(),
+      });
+    }
+
     // --- UPDATE QUEST PROGRESS ---
     await updateQuestProgressLogic(db, user._id, "answer_questions", 1);
 
@@ -173,6 +186,19 @@ export const markAsBestAnswer = mutation({
           createdAt: Date.now(),
         });
 
+        // --- SEND NOTIFICATION to answer owner ---
+        if (answerOwner._id !== user._id) {
+          await db.insert("notifications", {
+            userId: answerOwner._id,
+            fromUserId: user._id,
+            type: "best_answer",
+            message: `marked your answer as Best Answer on "${post.title}"`,
+            relatedPostId: postId,
+            read: false,
+            createdAt: Date.now(),
+          });
+        }
+
         // --- UPDATE QUEST PROGRESS ---
         await updateQuestProgressLogic(db, answerOwner._id, "get_best_answer", 1);
       }
@@ -209,6 +235,21 @@ export const toggleLikeAnswer = mutation({
 
     await db.patch(answerId, { likes: updatedLikes });
 
+    // --- SEND NOTIFICATION on like (not on unlike, not on self-like) ---
+    if (!hasLiked && answer.userId !== user._id) {
+      const post = await db.get(answer.postId);
+      const postTitle = post?.title ?? "a question";
+      await db.insert("notifications", {
+        userId: answer.userId,
+        fromUserId: user._id,
+        type: "like_answer",
+        message: `liked your answer on "${postTitle}"`,
+        relatedPostId: answer.postId,
+        read: false,
+        createdAt: Date.now(),
+      });
+    }
+
     return { success: true, liked: !hasLiked };
   },
 });
@@ -236,6 +277,15 @@ export const deleteAnswer = mutation({
     const post = await db.get(answer.postId);
     if (post && post.bestAnswerId === answerId) {
       await db.patch(post._id, { bestAnswerId: undefined });
+    }
+
+    // Delete associated comments
+    const comments = await db
+      .query("answerComments")
+      .filter((q) => q.eq(q.field("answerId"), answerId))
+      .collect();
+    for (const comment of comments) {
+      await db.delete(comment._id);
     }
 
     await db.delete(answerId);

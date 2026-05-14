@@ -154,12 +154,19 @@ export const deletePost = mutation({
     const isAdmin = user.role === "admin" || user.role === "Admin" || user.role === "developer" || user.role === "Developer";
     if (post.userId !== user._id && !isAdmin) throw new Error("Not authorized");
 
-    // Delete associated answers
+    // Delete associated answers and their comments
     const answers = await ctx.db
       .query("answers")
       .filter((q) => q.eq(q.field("postId"), args.postId))
       .collect();
     for (const answer of answers) {
+      const comments = await ctx.db
+        .query("answerComments")
+        .filter((q) => q.eq(q.field("answerId"), answer._id))
+        .collect();
+      for (const comment of comments) {
+        await ctx.db.delete(comment._id);
+      }
       await ctx.db.delete(answer._id);
     }
 

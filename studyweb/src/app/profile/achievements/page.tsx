@@ -16,9 +16,9 @@ function AchievementsContent() {
   const userAchievements = useQuery(api.achievements.getUserAchievements, userId ? { userId } : "skip");
   const profile = useQuery(api.users.getUserPublicProfile, userId ? { userId } : "skip");
 
-  if (!userId) return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center lg:pl-[280px]"><div className="text-center"><div className="text-6xl mb-4">⚠️</div><h2 className="text-2xl font-bold text-gray-800 mb-2">Missing User ID</h2><p className="text-gray-500">No user specified.</p></div></div></>);
+  if (!userId) return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center lg:pl-[280px]"><div className="text-center"><div className="text-6xl mb-4">⚠️</div><h2 className="text-2xl font-bold text-gray-800 mb-2">Missing User ID</h2><p className="text-gray-500">No user specified.</p></div></div></>);
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-12 px-5 pb-16 lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-12 px-5 pb-16 lg:pl-[280px]">
     <div className="max-w-5xl mx-auto">
       <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
         <Link href={`/profile/${userId}`} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl nm-btn text-gray-600 font-semibold transition-all"><ArrowLeft size={20} />Back to Profile</Link>
@@ -26,8 +26,8 @@ function AchievementsContent() {
 
       <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mb-10">
         <div className="flex items-center gap-4 mb-3">
-          {profile?.profilePic ? <img src={profile.profilePic} alt="" className="w-14 h-14 rounded-2xl object-cover" style={{ boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }} />
-          : <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><Trophy size={24} className="text-white" /></div>}
+          {profile?.profilePic ? <img src={profile.profilePic} alt="" className="w-14 h-14 rounded-2xl object-cover" style={{ boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }} />
+          : <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><Trophy size={24} className="text-white" /></div>}
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-gray-800">{profile?.name ? `${profile.name}'s` : ""} <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Achievements</span></h1>
             <p className="text-gray-500 mt-1">{userAchievements ? `${userAchievements.length} achievement${userAchievements.length !== 1 ? "s" : ""} earned` : "Loading..."}</p>
@@ -44,7 +44,7 @@ function AchievementsContent() {
           {userAchievements.map((ua, i) => (
             <motion.div key={ua._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} whileHover={{ y: -4 }} className="nm-raised p-6 transition-all">
               <div className="flex items-start gap-4 mb-4">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>
                   {ua.achievement?.imageUrl ? <img src={ua.achievement.imageUrl} alt={ua.achievement?.name} className="w-full h-full object-cover" /> : <Trophy className="text-white" size={28} />}
                 </div>
                 <div className="flex-1 min-w-0"><h3 className="text-lg font-bold text-gray-800 truncate">{ua.achievement?.name ?? "Unknown"}</h3><p className="text-sm text-gray-500 mt-1 line-clamp-2">{ua.achievement?.description}</p></div>
@@ -63,7 +63,7 @@ function AchievementsContent() {
 
 export default function AchievementsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><Loader2 className="w-12 h-12 text-purple-600 animate-spin" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><Loader2 className="w-12 h-12 text-purple-600 animate-spin" /></div>}>
       <AchievementsContent />
     </Suspense>
   );

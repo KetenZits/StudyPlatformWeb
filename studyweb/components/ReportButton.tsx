@@ -70,11 +70,11 @@ export default function ReportButton({ targetType, targetId, size = 16 }: Report
               initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md nm-raised p-6"
-              style={{ background: "#e0e5ec" }}
+              style={{ background: "var(--nm-bg)" }}
             >
               <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
                     <AlertTriangle size={20} className="text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-800">Report {targetType}</h3>
@@ -93,7 +93,7 @@ export default function ReportButton({ targetType, targetId, size = 16 }: Report
                       ? "text-red-600"
                       : "nm-flat text-gray-600 hover:text-gray-800"
                       }`}
-                    style={reason === r ? { boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff', background: '#e0e5ec' } : {}}
+                    style={reason === r ? { boxShadow: 'inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light)', background: 'var(--nm-bg)' } : {}}
                   >
                     {r}
                   </button>
@@ -106,7 +106,7 @@ export default function ReportButton({ targetType, targetId, size = 16 }: Report
                   onClick={handleSubmit}
                   disabled={!reason || submitting}
                   className={`flex-1 px-4 py-3 rounded-xl font-bold transition-all ${!reason || submitting ? "nm-btn text-gray-400 cursor-not-allowed" : "text-white"}`}
-                  style={reason && !submitting ? { background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' } : {}}
+                  style={reason && !submitting ? { background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' } : {}}
                 >
                   {submitting ? "Submitting..." : "Submit Report"}
                 </button>

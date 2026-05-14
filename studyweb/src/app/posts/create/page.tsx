@@ -86,7 +86,7 @@ export default function CreatePostPage() {
 
   const removeImage = () => { setFile(null); setPreviewUrl(null); };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-4xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-10">
         <div className="flex items-center gap-3 mb-3"><span className="text-5xl">✍️</span><h1 className="text-4xl sm:text-5xl font-black text-gray-800 tracking-tight">Create <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Question</span></h1></div>
@@ -130,7 +130,7 @@ export default function CreatePostPage() {
             <label className="flex items-center gap-2 text-base font-bold text-gray-800 mb-3"><ImageIcon size={20} className="text-purple-500" />Image (Optional)</label>
             {!previewUrl ? (
               <div onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }} onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }} onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileChange(e.dataTransfer.files[0]); }}
-                className={`relative border-2 border-dashed rounded-2xl p-8 sm:p-12 transition-all ${isDragging ? "border-purple-500" : "border-gray-400/50"}`} style={{ background: '#e0e5ec', boxShadow: isDragging ? 'inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff' : '' }}>
+                className={`relative border-2 border-dashed rounded-2xl p-8 sm:p-12 transition-all ${isDragging ? "border-purple-500" : "border-gray-400/50"}`} style={{ background: 'var(--nm-bg)', boxShadow: isDragging ? 'inset 4px 4px 8px var(--nm-shadow-dark), inset -4px -4px 8px var(--nm-shadow-light)' : '' }}>
                 <input type="file" accept="image/*" onChange={(e) => handleFileChange(e.target.files?.[0] || null)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                 <div className="text-center"><div className="w-16 h-16 mx-auto mb-4 rounded-2xl nm-raised flex items-center justify-center"><Upload size={32} className="text-purple-500" /></div><h3 className="text-lg font-bold text-gray-800 mb-2">{isDragging ? "Drop here" : "Upload an image"}</h3><p className="text-sm text-gray-500">Drag and drop or click to browse</p><p className="text-xs text-gray-400 mt-2">PNG, JPG, GIF up to 5MB</p></div>
               </div>

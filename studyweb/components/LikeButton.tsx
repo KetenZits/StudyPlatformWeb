@@ -46,8 +46,8 @@ export default function LikeButton({ answer, currentUser }: { answer: any, curre
           : "text-purple-500 hover:text-purple-700"
       }`}
       style={liked 
-        ? { boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff', background: '#e0e5ec' }
-        : { boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff', background: '#e0e5ec' }
+        ? { boxShadow: 'inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light)', background: 'var(--nm-bg)' }
+        : { boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)', background: 'var(--nm-bg)' }
       }
     >
       <ThumbsUp size={16} fill={liked ? "currentColor" : "none"} />

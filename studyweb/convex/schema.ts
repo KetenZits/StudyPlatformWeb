@@ -57,6 +57,14 @@ export default defineSchema({
     likes: v.optional(v.array(v.id("users"))),
   }),
 
+  // ================== ANSWER COMMENTS ==================
+  answerComments: defineTable({
+    answerId: v.id("answers"),
+    userId: v.id("users"),
+    body: v.string(),
+    createdAt: v.number(),
+  }),
+
   // ================== STORE ITEMS ==================
   storeItems: defineTable({
     name: v.string(),
@@ -140,6 +148,17 @@ export default defineSchema({
     progress: v.number(),
     completed: v.boolean(),
     claimedReward: v.boolean(),
+    createdAt: v.number(),
+  }),
+
+  // ================== NOTIFICATIONS ==================
+  notifications: defineTable({
+    userId: v.id("users"),
+    fromUserId: v.id("users"),
+    type: v.string(),          // "new_answer" | "best_answer" | "like_answer"
+    message: v.string(),
+    relatedPostId: v.optional(v.id("posts")),
+    read: v.boolean(),
     createdAt: v.number(),
   }),
 });

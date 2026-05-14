@@ -59,7 +59,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#d5dae3] relative overflow-hidden">
+    <footer className="bg-[var(--nm-bg-light)] relative overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-purple-400/5 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-400/5 rounded-full blur-3xl"></div>
@@ -80,7 +80,7 @@ const Footer = () => {
               {/* Logo */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #b0b8c7, -4px -4px 8px #f0f4fa' }}
+                  style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}
                 >
                   <span className="text-white font-black text-xl">N</span>
                 </div>

@@ -1,5 +1,5 @@
 "use client";
-import { Home, BookOpen, Store, User, Menu, X, Clock, Trophy, Search, Target, Shield, LogOut } from "lucide-react";
+import { Home, BookOpen, Store, User, Menu, X, Clock, Trophy, Search, Target, Shield, LogOut, LayoutDashboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -8,6 +8,8 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import SearchUsersModal from "./SearchUsersModal";
+import NotificationBell from "./NotificationBell";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Sidebar() {
   const currentUser = useQuery(api.users.getCurrentUser);
@@ -70,7 +72,7 @@ export default function Sidebar() {
                 ? "nm-btn-pressed text-purple-600 font-bold"
                 : "text-gray-500 hover:text-gray-800 font-medium hover:bg-white/30"
             }`}
-            style={isActive ? { boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff' } : {}}
+            style={isActive ? { boxShadow: 'inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light)' } : {}}
           >
             <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
             <span className="text-base">{item.label}</span>
@@ -89,6 +91,11 @@ export default function Sidebar() {
       {(userRole === "admin" || userRole === "Admin" || userRole === "developer" || userRole === "Developer") && (
         <div className="mt-6 pt-6 border-t border-gray-300/50">
           <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Admin Panel</p>
+          <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl font-semibold transition-all mb-1 text-white"
+            style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
+            <LayoutDashboard size={20} />
+            <span className="text-sm">Dashboard</span>
+          </Link>
           <Link href="/admin/achievements" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-100/30 font-semibold transition-colors">
             <Shield size={20} />
             <span className="text-sm">Achievements</span>
@@ -121,8 +128,8 @@ export default function Sidebar() {
   return (
     <>
       {/* 🟢 Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-[280px] bg-[#e0e5ec] z-50"
-        style={{ boxShadow: '6px 0 16px #a3b1c6, -2px 0 8px #ffffff' }}
+      <aside className="hidden lg:flex flex-col fixed top-0 left-0 bottom-0 w-[280px] bg-[var(--nm-bg)] z-50"
+        style={{ boxShadow: '6px 0 16px var(--nm-shadow-dark), -2px 0 8px var(--nm-shadow-light)' }}
       >
         
         {/* Logo Area */}
@@ -148,24 +155,32 @@ export default function Sidebar() {
         <div className="flex-1 overflow-y-auto px-4 py-2 custom-scrollbar">
           
           {/* Search Button */}
-          {isSignedIn && (
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="w-full flex items-center justify-between px-4 py-3.5 mb-6 rounded-xl nm-btn text-gray-500 hover:text-gray-800 transition-all"
-            >
-              <div className="flex items-center gap-3">
-                <Search size={20} />
-                <span className="font-medium text-sm">Search Users</span>
-              </div>
-              <span className="text-xs font-semibold px-2 py-1 rounded-md nm-inset-xs text-gray-500">Ctrl K</span>
-            </button>
+            {isSignedIn && (
+            <div className="mb-6">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl nm-btn text-gray-500 hover:text-gray-800 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <Search size={20} />
+                  <span className="font-medium text-sm">Search Users</span>
+                </div>
+                <span className="text-xs font-semibold px-2 py-1 rounded-md nm-inset-xs text-gray-500">Ctrl K</span>
+              </button>
+            </div>
           )}
 
           <NavLinks />
         </div>
 
         {/* Bottom User Area */}
-        <div className="p-4 border-t border-gray-300/40">
+        <div className="p-4 border-t border-gray-300/40 flex flex-col gap-4">
+          {isSignedIn && (
+            <div className="flex items-center justify-center gap-4">
+              <ThemeToggle />
+              <NotificationBell />
+            </div>
+          )}
           {!isSignedIn ? (
             <div className="flex flex-col gap-2">
               <Link href="/sign-in" className="w-full text-center px-4 py-3 rounded-xl nm-btn text-gray-800 font-bold hover:text-purple-600 transition-colors">
@@ -207,13 +222,13 @@ export default function Sidebar() {
       </aside>
 
       {/* 🔴 Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#e0e5ec]"
-        style={{ boxShadow: '0 4px 12px #a3b1c6' }}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[var(--nm-bg)]"
+        style={{ boxShadow: '0 4px 12px var(--nm-shadow-dark)' }}
       >
         <div className="flex items-center justify-between h-16 px-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}
+              style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}
             >
               <span className="text-white font-black text-lg">N</span>
             </div>
@@ -255,18 +270,26 @@ export default function Sidebar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[#e0e5ec] z-[70] flex flex-col lg:hidden"
-              style={{ boxShadow: '-8px 0 20px #a3b1c6' }}
+              className="fixed top-0 right-0 bottom-0 w-[280px] bg-[var(--nm-bg)] z-[70] flex flex-col lg:hidden"
+              style={{ boxShadow: '-8px 0 20px var(--nm-shadow-dark)' }}
             >
               {/* Drawer Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-300/40">
                 <span className="font-bold text-gray-800">Menu</span>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-10 h-10 rounded-xl nm-btn flex items-center justify-center text-gray-600"
-                >
-                  <X size={20} />
-                </button>
+                <div className="flex items-center gap-3">
+                  {isSignedIn && (
+                    <>
+                      <ThemeToggle />
+                      <NotificationBell />
+                    </>
+                  )}
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-10 h-10 rounded-xl nm-btn flex items-center justify-center text-gray-600"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
 
               {/* Drawer Content */}

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function BannedPage() {
     return (
-        <div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center p-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -20,7 +20,7 @@ export default function BannedPage() {
                     className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-8"
                     style={{ 
                       background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                      boxShadow: '10px 10px 20px #a3b1c6, -10px -10px 20px #ffffff'
+                      boxShadow: '10px 10px 20px var(--nm-shadow-dark), -10px -10px 20px var(--nm-shadow-light)'
                     }}
                 >
                     <Ban size={64} className="text-white" />
@@ -50,7 +50,7 @@ export default function BannedPage() {
                         className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-white font-bold text-lg transition-colors"
                         style={{ 
                           background: 'linear-gradient(135deg, #374151, #1f2937)',
-                          boxShadow: '6px 6px 14px #a3b1c6, -6px -6px 14px #ffffff'
+                          boxShadow: '6px 6px 14px var(--nm-shadow-dark), -6px -6px 14px var(--nm-shadow-light)'
                         }}
                     >
                         <LogOut size={22} />

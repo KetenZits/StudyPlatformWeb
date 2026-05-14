@@ -65,13 +65,13 @@ export default function AdminStorePage() {
   const handleDelete = async (id: Id<"storeItems">) => { try { await deleteItem({ id }); setDeleteConfirmId(null); toast.success("Deleted", "Item removed"); } catch (err: any) { toast.error("Delete Failed", err.message); } };
   const getTypeInfo = (t: string) => ITEM_TYPES.find((it) => it.value === t) || ITEM_TYPES[4];
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-6xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <Link href="/store" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-800 font-semibold mb-2 transition-colors"><ArrowLeft size={18} /> Back to Store</Link>
           <h1 className="text-3xl md:text-4xl font-black text-gray-800 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><ShoppingBag size={24} className="text-white" /></div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><ShoppingBag size={24} className="text-white" /></div>
             Store Manager
           </h1>
           <p className="text-gray-500 mt-1 ml-15">Manage store items and pricing</p>

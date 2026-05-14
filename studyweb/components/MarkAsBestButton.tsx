@@ -44,7 +44,7 @@ export default function MarkAsBestButton({ post, answer, currentUser }: { post: 
         <button
           disabled
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-green-700 font-semibold text-sm cursor-not-allowed"
-          style={{ boxShadow: 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff', background: '#e0e5ec' }}
+          style={{ boxShadow: 'inset 3px 3px 6px var(--nm-shadow-dark), inset -3px -3px 6px var(--nm-shadow-light)', background: 'var(--nm-bg)' }}
         >
           <CheckCircle size={16} />
           <span>✅ Best Answer</span>
@@ -54,8 +54,8 @@ export default function MarkAsBestButton({ post, answer, currentUser }: { post: 
       {/* popup ยืนยัน */}
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50">
-          <div className="bg-[#e0e5ec] rounded-3xl p-6 w-[90%] max-w-sm text-center"
-            style={{ boxShadow: '12px 12px 24px #a3b1c6, -12px -12px 24px #ffffff' }}
+          <div className="bg-[var(--nm-bg)] rounded-3xl p-6 w-[90%] max-w-sm text-center"
+            style={{ boxShadow: '12px 12px 24px var(--nm-shadow-dark), -12px -12px 24px var(--nm-shadow-light)' }}
           >
             <h2 className="text-lg font-semibold text-gray-800 mb-2">
               Confirm that this answer is the Best Answer?
@@ -69,7 +69,7 @@ export default function MarkAsBestButton({ post, answer, currentUser }: { post: 
                 onClick={handleConfirm}
                 disabled={loading}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-white font-medium transition-all text-sm"
-                style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}
+                style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}
               >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle size={16} />}
                 <span>{loading ? "Saving..." : "Confirm"}</span>

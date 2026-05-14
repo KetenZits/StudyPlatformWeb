@@ -44,11 +44,11 @@ export default function AdminCategoriesPage() {
     } catch (err) { toast.error("Error", (err as Error).message); }
   };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
     <div className="max-w-4xl mx-auto">
       <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6366f1)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>
             <Tags size={24} className="text-white" />
           </div>
           <div>
@@ -88,7 +88,7 @@ export default function AdminCategoriesPage() {
               className="nm-raised p-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <span className="text-lg font-bold text-gray-800">{cat.name}</span>
-                <span className="px-3 py-1 rounded-lg text-xs font-mono font-bold text-purple-600" style={{ boxShadow: 'inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff', background: '#e0e5ec' }}>{cat.slug}</span>
+                <span className="px-3 py-1 rounded-lg text-xs font-mono font-bold text-purple-600" style={{ boxShadow: 'inset 2px 2px 4px var(--nm-shadow-dark), inset -2px -2px 4px var(--nm-shadow-light)', background: 'var(--nm-bg)' }}>{cat.slug}</span>
               </div>
               <button onClick={() => handleDelete(cat._id)} disabled={deleting === cat._id}
                 className="p-2 rounded-lg nm-btn text-red-400 hover:text-red-600 transition-colors">

@@ -37,11 +37,11 @@ export default function AdminReportsPage() {
     { value: "all", label: "All", emoji: "📋" },
   ];
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
     <div className="max-w-6xl mx-auto">
       <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>
             <Shield size={24} className="text-white" />
           </div>
           <div>
@@ -75,7 +75,7 @@ export default function AdminReportsPage() {
                 <div className="flex-1 min-w-0">
                   {/* Header */}
                   <div className="flex items-center gap-2 flex-wrap mb-3">
-                    <span className="px-3 py-1 rounded-lg text-xs font-bold uppercase" style={{ boxShadow: 'inset 2px 2px 4px #a3b1c6, inset -2px -2px 4px #ffffff', background: '#e0e5ec' }}>
+                    <span className="px-3 py-1 rounded-lg text-xs font-bold uppercase" style={{ boxShadow: 'inset 2px 2px 4px var(--nm-shadow-dark), inset -2px -2px 4px var(--nm-shadow-light)', background: 'var(--nm-bg)' }}>
                       {report.targetType === "post" ? "📝" : report.targetType === "answer" ? "💬" : "👤"} {report.targetType}
                     </span>
                     <span className={`text-xs font-bold uppercase ${statusColors[report.status]}`}>● {report.status}</span>
@@ -83,7 +83,7 @@ export default function AdminReportsPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="mb-3 p-3 rounded-xl" style={{ boxShadow: 'inset 2px 2px 5px #a3b1c6, inset -2px -2px 5px #ffffff', background: '#dce1e8' }}>
+                  <div className="mb-3 p-3 rounded-xl" style={{ boxShadow: 'inset 2px 2px 5px var(--nm-shadow-dark), inset -2px -2px 5px var(--nm-shadow-light)', background: '#dce1e8' }}>
                     <p className="text-sm font-bold text-gray-800 mb-1">{report.targetContent}</p>
                     {report.targetAuthor && <p className="text-xs text-gray-500">By: {report.targetAuthor}</p>}
                   </div>
@@ -101,7 +101,7 @@ export default function AdminReportsPage() {
                   <div className="flex sm:flex-col gap-2 shrink-0">
                     <button onClick={() => handleResolve(report._id, "approve")}
                       className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all"
-                      style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+                      style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
                       <Check size={16} />Hide
                     </button>
                     <button onClick={() => handleResolve(report._id, "dismiss")}

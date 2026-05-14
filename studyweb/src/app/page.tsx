@@ -69,7 +69,7 @@ export default function Index() {
   return (
     <>
       <Sidebar />
-      <div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-8 lg:pl-[280px]">
+      <div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-8 lg:pl-[280px]">
 
         {/* Main Container - Web Layout */}
         <div className="max-w-7xl mx-auto px-8 py-10">
@@ -119,7 +119,7 @@ export default function Index() {
                 className="p-10 rounded-3xl relative overflow-hidden cursor-pointer"
                 style={{
                   background: 'linear-gradient(135deg, #8b5cf6, #6366f1, #3b82f6)',
-                  boxShadow: '8px 8px 20px #a3b1c6, -8px -8px 20px #ffffff'
+                  boxShadow: '8px 8px 20px var(--nm-shadow-dark), -8px -8px 20px var(--nm-shadow-light)'
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12"></div>
@@ -198,7 +198,7 @@ export default function Index() {
                 </div>
 
                 <div className="space-y-4 flex flex-row justify-between h-full">
-                  <Marquee pauseOnHover={true} gradient={true} speed={50} gradientColor="#e0e5ec" gradientWidth={50}>
+                  <Marquee pauseOnHover={true} gradient={true} speed={50} gradientColor="var(--nm-bg)" gradientWidth={50}>
                     {postsrecent?.slice(0, 5).map((post, i) => (
                       <motion.div
                         key={post._id}
@@ -218,11 +218,11 @@ export default function Index() {
                                   src={post.profilePic}
                                   alt={post.username || "User"}
                                   className="w-10 h-10 rounded-full object-cover border-2 border-purple-200"
-                                  style={{ boxShadow: '2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff' }}
+                                  style={{ boxShadow: '2px 2px 5px var(--nm-shadow-dark), -2px -2px 5px var(--nm-shadow-light)' }}
                                 />
                               ) : (
                                 <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                                  style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 5px #a3b1c6, -2px -2px 5px #ffffff' }}
+                                  style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '2px 2px 5px var(--nm-shadow-dark), -2px -2px 5px var(--nm-shadow-light)' }}
                                 >
                                   {post.username?.[0]?.toUpperCase() ?? "U"}
                                 </div>

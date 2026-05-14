@@ -92,8 +92,8 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, x: 80, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            className="relative w-[380px] max-w-[90vw] bg-[#e0e5ec] rounded-2xl overflow-hidden"
-            style={{ boxShadow: '8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff' }}
+            className="relative w-[380px] max-w-[90vw] bg-[var(--nm-bg)] rounded-2xl overflow-hidden"
+            style={{ boxShadow: '8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light)' }}
         >
             <div className="flex items-start gap-3 p-4">
                 {/* Icon */}

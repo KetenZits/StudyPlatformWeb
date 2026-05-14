@@ -51,14 +51,14 @@ export default function ProfilePage() {
   const getActivityColor = (type: string) => ({ posted: "from-purple-500 to-pink-500", answered: "from-blue-500 to-cyan-500", best_answer: "from-yellow-500 to-orange-500", earned_coins: "from-amber-500 to-orange-600" }[type] || "from-gray-500 to-gray-600");
   const getActivityIcon = (type: string) => ({ posted: "❓", answered: "✅", best_answer: "⭐", earned_coins: "💰" }[type] || "📝");
 
-  if (!user) return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><div className="text-6xl mb-4">🔒</div><h2 className="text-2xl font-bold text-gray-800 mb-2">Please Login</h2><p className="text-gray-500">You need to be logged in to view your profile</p></div></div>);
-  if (currentUser === undefined) return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Loading Profile...</h2></div></div>);
-  if (currentUser === null) return (<div className="min-h-screen bg-[#e0e5ec] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Creating Profile...</h2></div></div>);
+  if (!user) return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><div className="text-6xl mb-4">🔒</div><h2 className="text-2xl font-bold text-gray-800 mb-2">Please Login</h2><p className="text-gray-500">You need to be logged in to view your profile</p></div></div>);
+  if (currentUser === undefined) return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Loading Profile...</h2></div></div>);
+  if (currentUser === null) return (<div className="min-h-screen bg-[var(--nm-bg)] flex items-center justify-center"><div className="text-center"><Loader2 className="w-16 h-16 text-purple-600 animate-spin mx-auto mb-4" /><h2 className="text-2xl font-bold text-gray-800 mb-2">Creating Profile...</h2></div></div>);
 
   const roleBadge = getRoleBadge(currentUser.role);
   const RoleIcon = roleBadge.icon;
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] lg:pl-[280px]">
     <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-20 md:pt-12 pb-16">
       <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-10">
         <div className="flex items-center gap-3 mb-3"><span className="text-5xl">👤</span><h1 className="text-4xl sm:text-5xl font-black text-gray-800 tracking-tight">Profile <span className="bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Overview</span></h1></div>
@@ -75,10 +75,10 @@ export default function ProfilePage() {
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 -mt-16 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-end gap-5">
                 <div className="relative w-fit">
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl flex items-center justify-center ring-4 ring-[#e0e5ec] overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff' }}>
+                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl flex items-center justify-center ring-4 ring-[var(--nm-bg)] overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light)' }}>
                     {currentUser.profilePic ? <img src={currentUser.profilePic} alt={currentUser.name} className="w-full h-full object-cover" /> : <span className="text-white font-black text-4xl">{getInitials(currentUser.name)}</span>}
                   </div>
-                  {currentUser.banned && <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-red-500 flex items-center justify-center shadow-xl ring-4 ring-[#e0e5ec]"><Ban size={18} className="text-white" /></div>}
+                  {currentUser.banned && <div className="absolute -top-2 -right-2 w-10 h-10 rounded-full bg-red-500 flex items-center justify-center shadow-xl ring-4 ring-[var(--nm-bg)]"><Ban size={18} className="text-white" /></div>}
                 </div>
                 <div className="pb-2 mt-4 sm:mt-0 flex items-center gap-7 justify-center">
                   <h2 className="text-2xl sm:text-3xl font-black text-gray-800 mb-2 break-words">{currentUser.name}</h2>
@@ -115,7 +115,7 @@ export default function ProfilePage() {
               return (
                 <div key={i} className="nm-raised p-6 hover:scale-[1.02] transition-all">
                   <div className="flex items-center gap-4">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.grad} flex items-center justify-center`} style={{ boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><Icon size={28} className="text-white" /></div>
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.grad} flex items-center justify-center`} style={{ boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><Icon size={28} className="text-white" /></div>
                     <div className="flex-1"><div className="text-sm font-semibold text-gray-500 mb-1">{stat.label}</div><div className="text-3xl font-black text-gray-800">{stat.value}<span className="text-lg font-semibold text-gray-500">{stat.suffix}</span></div>
                       {stat.extra && <p className="text-xs text-red-500 font-semibold mt-1">{stat.extra}</p>}
                     </div>
@@ -135,7 +135,7 @@ export default function ProfilePage() {
             : userAchievements.length === 0 ? <div className="text-center py-6"><Trophy className="mx-auto text-gray-300 mb-2" size={32} /><p className="text-sm text-gray-400">No achievements yet</p></div>
             : <div className="grid grid-cols-2 gap-3">{userAchievements.slice(0, 4).map((ua) => (
               <motion.div key={ua._id} whileHover={{ scale: 1.05, y: -2 }} className="aspect-square rounded-2xl nm-flat hover:shadow-md transition-all cursor-pointer flex flex-col items-center justify-center gap-2 p-3">
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
                   {ua.achievement?.imageUrl ? <img src={ua.achievement.imageUrl} alt="" className="w-full h-full object-cover" /> : <Trophy size={22} className="text-white" />}
                 </div>
                 <span className="text-xs font-bold text-gray-700 text-center leading-tight">{ua.achievement?.name}</span>

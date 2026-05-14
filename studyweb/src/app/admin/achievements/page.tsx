@@ -46,12 +46,12 @@ export default function AchievementsAdminPage() {
 
   const handleDelete = async (id: Id<"achievements">) => { try { await deleteAchievement({ id }); setDeleteConfirmId(null); } catch (err: any) { toast.error("ลบไม่สำเร็จ", err.message); } };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-12 px-5 pb-10 lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-12 px-5 pb-10 lg:pl-[280px]">
     <div className="max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
         <div>
           <h1 className="text-4xl font-black text-gray-800 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><Trophy size={24} className="text-white" /></div>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><Trophy size={24} className="text-white" /></div>
             Achievement Manager
           </h1>
           <p className="text-gray-500 mt-2">จัดการ Achievement ทั้งหมดในระบบ</p>
@@ -93,9 +93,9 @@ export default function AchievementsAdminPage() {
   <AnimatePresence>{deleteConfirmId && (
     <ModalOverlay onClose={() => setDeleteConfirmId(null)}>
       <div className="text-center">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}><Trash2 className="text-white" size={28} /></div>
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}><Trash2 className="text-white" size={28} /></div>
         <h2 className="text-xl font-bold text-gray-800 mb-2">ยืนยันการลบ</h2><p className="text-gray-500 mb-6">Achievement นี้และข้อมูลที่เกี่ยวข้องจะถูกลบทั้งหมด</p>
-        <div className="flex items-center gap-3"><button onClick={() => setDeleteConfirmId(null)} className="flex-1 px-4 py-3 rounded-xl nm-btn text-gray-600 font-semibold">ยกเลิก</button><button onClick={() => handleDelete(deleteConfirmId)} className="flex-1 px-4 py-3 rounded-xl text-white font-bold" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>ลบ</button></div>
+        <div className="flex items-center gap-3"><button onClick={() => setDeleteConfirmId(null)} className="flex-1 px-4 py-3 rounded-xl nm-btn text-gray-600 font-semibold">ยกเลิก</button><button onClick={() => handleDelete(deleteConfirmId)} className="flex-1 px-4 py-3 rounded-xl text-white font-bold" style={{ background: 'linear-gradient(135deg, #ef4444, #dc2626)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>ลบ</button></div>
       </div>
     </ModalOverlay>
   )}</AnimatePresence>
@@ -110,7 +110,7 @@ function AchievementCard({ achievement, isExpanded, onToggleExpand, onEdit, onDe
       <div className="p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-start gap-4 flex-1">
-            <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+            <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
               {achievement.imageUrl ? <img src={achievement.imageUrl} alt={achievement.name} className="w-full h-full object-cover" /> : <Trophy className="text-white" size={24} />}
             </div>
             <div className="min-w-0"><h3 className="text-lg font-bold text-gray-800">{achievement.name}</h3><p className="text-sm text-gray-500 mt-1">{achievement.description}</p>
@@ -180,7 +180,7 @@ function AssignModal({ achievementId, onClose }: { achievementId: Id<"achievemen
               {user.profilePic ? <img src={user.profilePic} alt="" className="w-10 h-10 rounded-full object-cover" /> : <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)' }}>{user.name[0]}</div>}
               <div><p className="text-sm font-semibold text-gray-800">{user.name}</p><p className="text-xs text-gray-400">{user.email}</p></div>
             </div>
-            <button onClick={() => handleAward(user._id)} disabled={awarding} className="px-4 py-2 rounded-xl text-white text-sm font-bold disabled:opacity-50 transition-all" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>มอบ</button>
+            <button onClick={() => handleAward(user._id)} disabled={awarding} className="px-4 py-2 rounded-xl text-white text-sm font-bold disabled:opacity-50 transition-all" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>มอบ</button>
           </div>
         ))}
       </div>

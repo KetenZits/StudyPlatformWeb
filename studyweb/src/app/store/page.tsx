@@ -24,7 +24,7 @@ const StorePage = () => {
     try { await buyItem({ itemId }); } catch (error) { console.error(error); toast.error("ซื้อไม่สำเร็จ", "เกิดข้อผิดพลาด กรุณาลองใหม่"); }
   };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
     <div className="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
         <h1 className="text-4xl font-black text-gray-800 flex items-center gap-3"><ShoppingBag className="text-purple-500" size={40} />Item Store</h1>
@@ -32,7 +32,7 @@ const StorePage = () => {
       </div>
       {currentUser && (
         <div className="nm-raised px-6 py-3 flex items-center gap-3">
-          <div className="p-2 rounded-full" style={{ background: 'linear-gradient(135deg, #facc15, #f59e0b)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}><Coins className="text-white" size={24} /></div>
+          <div className="p-2 rounded-full" style={{ background: 'linear-gradient(135deg, #facc15, #f59e0b)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}><Coins className="text-white" size={24} /></div>
           <div><p className="text-xs text-gray-500 font-bold uppercase">My Balance</p><p className="text-2xl font-black text-gray-800">{currentUser.coins} Coins</p></div>
         </div>
       )}

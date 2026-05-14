@@ -39,12 +39,12 @@ export default function QuestsPage() {
     } catch (error) { toast.error("Error", (error as Error).message); }
   };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-10 pb-16 lg:pl-[280px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-10 pb-16 lg:pl-[280px]">
     <div className="max-w-4xl mx-auto px-5 md:px-8">
       <div className="text-center mb-12 relative">
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", bounce: 0.5 }}
           className="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center rotate-3 mb-6"
-          style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff' }}>
+          style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '8px 8px 16px var(--nm-shadow-dark), -8px -8px 16px var(--nm-shadow-light)' }}>
           <Target size={48} className="text-white" />
         </motion.div>
         <h1 className="text-4xl sm:text-5xl font-black text-gray-800 mb-4 tracking-tight">Daily <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-500">Quests</span></h1>
@@ -70,7 +70,7 @@ export default function QuestsPage() {
               <motion.div key={quest._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
                 className={`relative overflow-hidden p-6 transition-all ${isClaimed ? "nm-inset opacity-70" : isReadyToClaim ? "nm-raised ring-2 ring-green-400" : "nm-raised"}`}>
                 {isClaimed && (
-                  <div className="absolute inset-0 bg-[#e0e5ec]/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-[var(--nm-bg)]/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
                     <div className="nm-raised px-6 py-3 flex items-center gap-2 transform rotate-12"><CheckCircle className="text-green-500" /><span className="font-bold text-gray-800">Completed!</span></div>
                   </div>
                 )}

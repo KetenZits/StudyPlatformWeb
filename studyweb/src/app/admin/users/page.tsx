@@ -41,11 +41,11 @@ export default function AdminUsersPage() {
     } catch (err) { toast.error("Error", (err as Error).message); }
   };
 
-  return (<><Sidebar /><div className="min-h-screen bg-[#e0e5ec] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
+  return (<><Sidebar /><div className="min-h-screen bg-[var(--nm-bg)] pt-20 lg:pt-10 px-5 pb-10 lg:pl-[300px]">
     <div className="max-w-6xl mx-auto">
       <motion.div initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '4px 4px 8px var(--nm-shadow-dark), -4px -4px 8px var(--nm-shadow-light)' }}>
             <Users size={24} className="text-white" />
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function AdminUsersPage() {
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                 {/* Avatar + Info */}
                 <Link href={`/profile/${user._id}`} className="flex items-center gap-3 flex-1 min-w-0 group">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff' }}>
+                  <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)', boxShadow: '3px 3px 6px var(--nm-shadow-dark), -3px -3px 6px var(--nm-shadow-light)' }}>
                     {user.profilePic ? <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />
                       : <span className="text-white font-bold text-sm">{user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}</span>}
                   </div>
